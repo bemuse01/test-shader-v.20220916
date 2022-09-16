@@ -32,8 +32,8 @@ export default {
             vec2 ratio = (oPosition / resolution);
             vec4 color = texture(uTexture, coord + ratio);
             
-            // float dist = distance(vUv * 2.0, vec2(0));
-            float dist = distance(vUv.y * 2.0, 0.0);
+            float dist = distance(vUv * 2.0, vec2(1.0, 0.0));
+            // float dist = distance(vUv.y * 2.0, 0.0);
             float opacity = 1.0 - dist;
 
             color.rgb *= brightness;

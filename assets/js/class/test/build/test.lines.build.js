@@ -10,7 +10,7 @@ export default class{
         this.images = images
 
         this.param = {
-            count: 400,
+            count: 300,
             height: 160,
             brightness: 1.5,
             chance: 0.999
