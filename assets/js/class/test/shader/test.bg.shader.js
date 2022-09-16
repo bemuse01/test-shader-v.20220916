@@ -9,12 +9,15 @@ export default {
         }
     `,
     fragment: `
-        uniform sampler2D uTexture;    
+        uniform sampler2D uTexture;
+        uniform float brightness;  
 
         varying vec2 vUv;
 
         void main(){
             vec4 color = texture(uTexture, vUv);
+
+            color.rgb *= brightness;
 
             gl_FragColor = color;
         }

@@ -1,7 +1,7 @@
 import * as THREE from '../../lib/three.module.js'
 import PublicMethod from '../../method/method.js'
 
-// import Bg from './build/test.bg.build.js'
+import Bg from './build/test.bg.build.js'
 import Lines from './build/test.lines.build.js'
 
 export default class{
@@ -16,7 +16,7 @@ export default class{
         }
 
         this.modules = {
-            // Bg,
+            Bg,
             Lines
         }
         this.group = {}

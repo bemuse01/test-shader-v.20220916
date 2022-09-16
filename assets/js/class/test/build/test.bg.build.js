@@ -10,6 +10,10 @@ export default class{
         this.gpu = gpu
         this.images = images
 
+        this.param = {
+            brightness: 0.4
+        }
+
         this.init()
     }
 
@@ -24,7 +28,7 @@ export default class{
     create(){
         const {el, obj} = this.size
         const [mona] = this.images
-        const texture = this.createCanvasTexture(mona, el.w, el.h)
+        const texture = ParentMethod.createTextureFromCanvas({img: mona, width: el.w, height: el.h})
         
         this.plane = new Plane({
             width: obj.w,
@@ -37,7 +41,8 @@ export default class{
                 fragmentShader: Shader.fragment,
                 transparent: true,
                 uniforms: {
-                    uTexture: {value: texture}
+                    uTexture: {value: texture},
+                    brightness: {value: this.param.brightness}
                 } 
             }
         })
@@ -46,23 +51,12 @@ export default class{
     }
 
 
-    // 
-    createCanvasTexture(img, width, height){
-        const canvas = ParentMethod.createTextureFromCanvas({img, width, height})
-        const texture = new THREE.CanvasTexture(canvas)
-        return texture
-    }
-
-
     // resize
     resize(size){
         this.size = size
-        const {el, obj} = this.size
-        const [mona] = this.images
 
-        this.plane.resize(obj.w, obj.h)
-
-        const texture = this.createCanvasTexture(mona, el.w, el.h)
-        this.plane.setUniform('uTexture', texture)
+        this.group.clear()
+        this.plane.dispose()
+        this.create()
     }
 }

@@ -59,16 +59,6 @@ export default class{
     }
 
 
-    // resize
-    resize(w, h){
-        this.width = w
-        this.height = h
-        
-        this.mesh.geometry.dispose()
-        this.mesh.geometry = this.createGeometry()
-    }
-
-
     // set
     setAttribute(name, array, itemSize){
         this.mesh.geometry.setAttribute(name, new THREE.BufferAttribute(array, itemSize))
