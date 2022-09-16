@@ -60,12 +60,18 @@ export default class{
         const position = []
 
         const {count} = this.param
+        
         const width = this.size.obj.w
+        const height = this.size.obj.h
+
         const halfWidth = width / 2
+        const halfHeight = width / 2
+
         const w = width / (count - 1)
 
         for(let i = 0; i < count; i++){
             const x = -halfWidth + w * i
+            // const y = halfHeight 
             const y = 0
 
             position.push(x, y, 0)
