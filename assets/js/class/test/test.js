@@ -1,8 +1,9 @@
 import * as THREE from '../../lib/three.module.js'
 import PublicMethod from '../../method/method.js'
 
-import Bg from './build/test.bg.build.js'
-import Lines from './build/test.lines.build.js'
+// import Bg from './build/test.bg.build.js'
+// import Lines from './build/test.lines.build.js'
+import Trail from './build/test.trail.build.js'
 
 export default class{
     constructor({app}){
@@ -16,8 +17,9 @@ export default class{
         }
 
         this.modules = {
-            Bg,
-            Lines
+            // Bg,
+            // Lines
+            Trail
         }
         this.group = {}
         this.comp = {}
@@ -55,15 +57,18 @@ export default class{
 
         const {width, height} = this.element.getBoundingClientRect()
 
+        const w = width * RATIO
+        const h = height * RATIO
+
         this.scene = new THREE.Scene()
 
-        this.camera = new THREE.PerspectiveCamera(this.param.fov, width / height, this.param.near, this.param.far)
+        this.camera = new THREE.PerspectiveCamera(this.param.fov, w / h, this.param.near, this.param.far)
         this.camera.position.z = this.param.pos
         
         this.size = {
             el: {
-                w: width,
-                h: height
+                w,
+                h
             },
             obj: {
                 w: PublicMethod.getVisibleWidth(this.camera, 0),
