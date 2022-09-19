@@ -66,7 +66,7 @@ export default {
             if(rCoord.x > pos - gap && rCoord.x < pos + gap){
                 float dist = distance(pos, rCoord.x);
                 float opacity = executeNormalizing(dist, 0.0, 1.0, 0.0, gap);
-                color.w = 1.0 - opacity;
+                color.w = 1.1 - opacity;
             }
 
             gl_FragColor = color;
