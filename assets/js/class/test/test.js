@@ -29,6 +29,10 @@ export default class{
             './assets/src/1.png'
         ]
 
+        this.sources2 = [
+            './assets/src/trail_fg.png'
+        ]
+
         this.gpu = new GPU()
 
         this.init()
@@ -40,7 +44,7 @@ export default class{
         this.initGroup()
         this.initRenderObject()
 
-        // this.textures = await this.getTextures(this.sources)
+        // this.textures = await this.getTextures(this.sources2)
         this.images = await this.getImages(this.sources)
 
         this.create()
@@ -107,7 +111,7 @@ export default class{
             const loader = new THREE.TextureLoader(manager)
             
             // load textures
-            const textures = sources.map(source => loader.load(file))
+            const textures = sources.map(source => loader.load(source))
         })
     }
     getImage(urls){
