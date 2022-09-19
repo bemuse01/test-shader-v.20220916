@@ -51,10 +51,13 @@ export default {
 
             float minRange = 0.45;
             float maxRange = 0.55;
-            float nPos = snoise2D(rCoord * 2.0);
+            float nPos = snoise2D(rCoord * vec2(1.0, 10.0));
             float pos = executeNormalizing(nPos, minRange, maxRange, -1.0, 1.0);
 
-            if(rCoord.x > pos - 0.1 && rCoord.x < pos + 0.1) color.w = 1.0;
+            float nGap = snoise2D(rCoord * vec2(1.0, 1.0));
+            float gap = executeNormalizing(nGap, 0.05, 0.1, -1.0, 1.0);
+
+            if(rCoord.x > pos - gap && rCoord.x < pos + gap) color.w = 1.0;
 
             gl_FragColor = color;
         }
