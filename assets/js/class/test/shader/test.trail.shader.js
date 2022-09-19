@@ -41,7 +41,8 @@ export default {
             // float r = snoise2D(rCoord);
             // float n = (r * 0.5) + 0.5;
 
-            vec4 color = vec4(vec3(1), 0.0);
+            // vec4 color = vec4(vec3(1), 0.0);
+            vec4 color = vec4(1);
 
             // color.w = 1.0 - n;
             // // color.w = rCoord.x;
@@ -51,14 +52,15 @@ export default {
 
             float minRange = 0.35;
             float maxRange = 0.65;
-            float nPos = snoise2D(rCoord * vec2(0.1, 5.0));
+            float nPos = snoise2D(rCoord * vec2(0.5, 5.0));
             float pos = executeNormalizing(nPos, minRange, maxRange, -1.0, 1.0);
 
             // float nGap = snoise2D(rCoord * vec2(0.01, 1.0));
             // float gap = executeNormalizing(nGap, 0.05, 0.1, -1.0, 1.0);
             float gap = 0.1;
 
-            if(rCoord.x > pos - gap && rCoord.x < pos + gap) color.w = 1.0;
+            // if(rCoord.x > pos - gap && rCoord.x < pos + gap) color.w = 1.0;
+            if(rCoord.x < pos - gap || rCoord.x > pos + gap) discard;
 
             gl_FragColor = color;
         }
