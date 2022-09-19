@@ -24,8 +24,8 @@ export default class{
     // create
     create(){
         this.plane = new Plane({
-            // width: this.param.width,
-            width: this.size.obj.w,
+            width: this.param.width,
+            // width: this.size.obj.w,
             height: this.size.obj.h,
             widthSeg: 1,
             heightSeg: 1,
@@ -37,11 +37,20 @@ export default class{
                 uniforms: {
                     eResolution: {value: new THREE.Vector2(this.size.el.w, this.size.el.h)},
                     oResolution: {value: new THREE.Vector2(this.size.obj.w, this.size.obj.h)},
-                    width: {value: this.param.width}
+                    width: {value: this.param.width},
+                    time: {value: 0}
                 }
             }
         })
 
         this.group.add(this.plane.get())
+    }
+
+
+    // animate
+    animate(){
+        const time = this.plane.getUniform('time') + 0.1
+        
+        this.plane.setUniform('time', time)
     }
 }
