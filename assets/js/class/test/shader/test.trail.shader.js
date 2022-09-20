@@ -58,14 +58,19 @@ export default {
             float maxRange = 0.65;
             float nPos = snoise2D(rCoord * vec2(0.2, 5.0));
             float pos = executeNormalizing(nPos, minRange, maxRange, -1.0, 1.0);
+            // float posY = eResolution.y * 0.5 / eResolution.y;
 
             float gap = 0.2;
 
             if(rCoord.x > pos - gap && rCoord.x < pos + gap){
                 float dist = distance(pos, rCoord.x);
                 float opacity = executeNormalizing(dist, 0.0, 1.0, 0.0, gap);
+
+                // float opacity2 = step(posY, rCoord.y);
+                float opacity2 = 1.0;
+
                 color.xyz *= 1.0 - opacity * 0.5;
-                color.w = 1.1 - opacity;
+                color.w = (1.1 - opacity) * opacity2;
             }
 
             gl_FragColor = color;

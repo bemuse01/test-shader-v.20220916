@@ -46,12 +46,19 @@ export default class{
                     oResolution: {value: new THREE.Vector2(this.size.obj.w, this.size.obj.h)},
                     width: {value: this.param.width},
                     time: {value: 0},
-                    uTexture: {value: texture}
+                    uTexture: {value: texture},
+
                 }
             }
         })
 
         this.group.add(this.plane.get())
+    }
+
+
+    // texture
+    createTexture(){
+
     }
 
 
