@@ -20,6 +20,8 @@ export default {
         uniform float width;
         uniform float time;
         uniform sampler2D uTexture;
+        uniform sampler2D uSeed;
+        uniform float currentY;
 
         varying vec2 vUv;
         varying vec2 oPosition;
@@ -43,6 +45,7 @@ export default {
 
             // vec4 color = vec4(vec3(1), 0.0);
             vec4 color = texture(uTexture, uv);
+            vec4 seed = texture(uSeed, vUv);
 
             color.xyz *= 2.0;
             color.w = 0.0;
@@ -56,7 +59,8 @@ export default {
 
             float minRange = 0.35;
             float maxRange = 0.65;
-            float nPos = snoise2D(rCoord * vec2(0.2, 5.0));
+            // float nPos = snoise2D(rCoord * vec2(0.2, 5.0));
+            float nPos = snoise2D(vec2(0.0, seed.x) * vec2(0.2, 5.0));
             float pos = executeNormalizing(nPos, minRange, maxRange, -1.0, 1.0);
             // float posY = eResolution.y * 0.5 / eResolution.y;
 
@@ -70,6 +74,7 @@ export default {
                 float opacity2 = 1.0;
 
                 color.xyz *= 1.0 - opacity * 0.5;
+                // color.w = 1.0;
                 color.w = (1.1 - opacity) * opacity2;
             }
 

@@ -11,8 +11,12 @@ export default class{
         // this.textures = textures
 
         this.param = {
-            width: 10
+            width: 10,
+            xRange: 0.15,
+            xDist: 5,
         }
+
+        this.ratio = 0
 
         this.init()
     }
@@ -26,9 +30,14 @@ export default class{
 
     // create
     create(){
-        // const [trail] = this.textures
+        this.createTrail()
+        // this.createDrop()
+    }
+    createTrail(){
         const [mona] = this.images
         const texture = ParentMethod.createTextureFromCanvas({img: mona, width: this.size.el.w, height: this.size.el.h})
+
+        const {seed} = this.createTexture()
 
         this.plane = new Plane({
             width: this.param.width,
@@ -47,25 +56,77 @@ export default class{
                     width: {value: this.param.width},
                     time: {value: 0},
                     uTexture: {value: texture},
-
+                    uSeed: {value: seed},
+                    currentY: {value: 0}
                 }
             }
         })
 
         this.group.add(this.plane.get())
     }
+    createDrop(){
+        this.drop = new Plane({
+            width: 4, 
+            height: 4,
+            widthSeg: 1,
+            heightSeg: 1,
+            materialName: 'MeshBasicMaterial',
+            materialOpt: {
+                color: 0xffffff
+            }
+        })
+
+        this.group.add(this.drop.get())
+    }
 
 
     // texture
     createTexture(){
+        const seed = []
 
+        const height = ~~this.size.el.h
+
+        for(let i = 0; i < height; i++){
+            seed.push(i / height, 0, 0, 0)
+        }
+
+        const seedTexture = new THREE.DataTexture(new Float32Array(seed), 1, height, THREE.RGBAFormat, THREE.FloatType)
+        seedTexture.needsUpdate = true
+
+        return {seed: seedTexture}
     }
 
 
     // animate
     animate(){
         const time = this.plane.getUniform('time') + 0.1
+
+        // this.moveDrop()
         
         this.plane.setUniform('time', time)
+        // this.plane.setUniform('currentY', this.ratio)
+
+    }
+    moveDrop(){
+        const mesh = this.drop.get()
+        const pos = mesh.position
+        const {xRange, xDist} = this.param
+
+        const size = 8 / 2
+        const height = this.size.obj.h
+        const halfHeight = height / 2
+
+        const cy = pos.y
+        
+        const bound = new THREE.Vector2(0, halfHeight)
+        this.ratio = new THREE.Vector2(0, pos.y).distanceTo(bound) / height
+
+        const rn = SIMPLEX.noise2D(0.0 * 0.2, this.ratio * 5.0)
+        const pn = THREE.MathUtils.mapLinear(rn, -1, 1, -xRange, xRange)
+
+        pos.x = pn * xDist
+        pos.y -= 0.1
+
+        if(cy < -halfHeight + -size) pos.y = halfHeight + size
     }
 }
