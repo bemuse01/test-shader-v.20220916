@@ -50,7 +50,7 @@ export default {
             float oRatio = width / oResolution.x;
             float eWidth = oRatio * eResolution.x;
 
-            // vec2 pos = vec2(0);
+            // vec2 realPos = vec2(0);
             vec2 size = vec2(eWidth, eResolution.y);
             vec2 rCoord = getCurrentCoord(st, vec2(0), size);
 
@@ -61,11 +61,10 @@ export default {
 
             float gap = 0.2;
 
-            // if(rCoord.x > pos - gap && rCoord.x < pos + gap) color.w = 1.0;
-            // if(rCoord.x < pos - gap || rCoord.x > pos + gap) discard;
             if(rCoord.x > pos - gap && rCoord.x < pos + gap){
                 float dist = distance(pos, rCoord.x);
                 float opacity = executeNormalizing(dist, 0.0, 1.0, 0.0, gap);
+                color.xyz *= 1.0 - opacity * 0.5;
                 color.w = 1.1 - opacity;
             }
 
