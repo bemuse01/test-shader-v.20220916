@@ -71,8 +71,8 @@ export default {
                 float dist = distance(pos, rCoord.x);
                 float opacity = executeNormalizing(dist, 0.0, 1.0, 0.0, gap);
 
-                // float opacity2 = step(posY, rCoord.y);
-                float opacity2 = 1.0;
+                float opacity2 = step(1.0 - currentY, rCoord.y);
+                // float opacity2 = 1.0;
 
                 color.xyz *= 1.0 - opacity * 0.5;
                 // color.w = 1.0;
