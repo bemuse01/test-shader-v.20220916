@@ -102,5 +102,5 @@ export default {
         ctx.drawImage(img, cx, cy, cw, ch, x, y, w, h)
 
         return ctx.canvas
-    }
+    },
 }

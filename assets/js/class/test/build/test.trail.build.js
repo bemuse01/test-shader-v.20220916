@@ -1,7 +1,9 @@
 import * as THREE from '../../../lib/three.module.js'
+import { Vector2, Vector4 } from '../../../lib/three.module.js'
 import Plane from '../../objects/plane.js'
 import Shader from '../shader/test.trail.shader.js'
 import ParentMethod from '../method/test.method.js'
+import PublicMethod from '../../../method/method.js'
 
 export default class{
     constructor({group, size, images}){
@@ -31,7 +33,7 @@ export default class{
     // create
     create(){
         this.createTrail()
-        // this.createDrop()
+        this.createDrop()
     }
     createTrail(){
         const [mona] = this.images
@@ -85,9 +87,15 @@ export default class{
         const seed = []
 
         const height = ~~this.size.el.h
+        const {xRange} = this.param
 
         for(let i = 0; i < height; i++){
-            seed.push(i / height, 0, 0, 0)
+            const ratio = i / height
+
+            const rn = SIMPLEX.noise2D(0.0 * 0.2, ratio * 5.0)
+            const pn = PublicMethod.normalize(rn, 0.5 - xRange, 0.5 + xRange, -1, 1)
+
+            seed.push(ratio, pn, 0, 0)
         }
 
         const seedTexture = new THREE.DataTexture(new Float32Array(seed), 1, height, THREE.RGBAFormat, THREE.FloatType)
@@ -101,10 +109,10 @@ export default class{
     animate(){
         const time = this.plane.getUniform('time') + 0.1
 
-        // this.moveDrop()
+        this.moveDrop()
         
         this.plane.setUniform('time', time)
-        // this.plane.setUniform('currentY', this.ratio)
+        this.plane.setUniform('currentY', this.ratio)
 
     }
     moveDrop(){
@@ -122,7 +130,8 @@ export default class{
         this.ratio = new THREE.Vector2(0, pos.y).distanceTo(bound) / height
 
         const rn = SIMPLEX.noise2D(0.0 * 0.2, this.ratio * 5.0)
-        const pn = THREE.MathUtils.mapLinear(rn, -1, 1, -xRange, xRange)
+        // const pn = THREE.MathUtils.mapLinear(rn, -1, 1, -xRange, xRange)
+        const pn = PublicMethod.normalize(rn, -xRange, xRange, -1, 1)
 
         pos.x = pn * xDist
         pos.y -= 0.1
