@@ -5,11 +5,12 @@ import ParentMethod from '../method/test.method.js'
 import PublicMethod from '../../../method/method.js'
 
 export default class{
-    constructor({group, size, images, textures}){
+    constructor({group, size, images, textures, seed}){
         this.group = group
         this.size = size
         this.images = images
         this.textures = textures
+        this.seed = seed
 
         this.param = {
             width: 10,
@@ -32,14 +33,12 @@ export default class{
     // create
     create(){
         this.createTrail()
-        this.createDrop()
+        // this.createDrop()
     }
     createTrail(){
         const [mona] = this.images
         const [fg] = this.textures
         const bg = ParentMethod.createTextureFromCanvas({img: mona, width: this.size.el.w, height: this.size.el.h})
-
-        const {seed} = this.createTexture()
 
         this.plane = new Plane({
             width: this.param.width,
@@ -59,7 +58,7 @@ export default class{
                     time: {value: 0},
                     tBg: {value: bg},
                     tFg: {value: fg},
-                    uSeed: {value: seed},
+                    uSeed: {value: this.seed},
                     currentY: {value: 0},
                 }
             }
@@ -85,24 +84,6 @@ export default class{
 
     // texture
     createTexture(){
-        const seed = []
-
-        const height = ~~this.size.el.h
-        const {xRange} = this.param
-
-        for(let i = 0; i < height; i++){
-            const ratio = i / height
-
-            const rn = SIMPLEX.noise2D(0.0 * 0.2, ratio * 5.0)
-            const pn = PublicMethod.normalize(rn, 0.5 - xRange, 0.5 + xRange, -1, 1)
-
-            seed.push(ratio, pn, 0, 0)
-        }
-
-        const seedTexture = new THREE.DataTexture(new Float32Array(seed), 1, height, THREE.RGBAFormat, THREE.FloatType)
-        seedTexture.needsUpdate = true
-
-        return {seed: seedTexture}
     }
 
 
@@ -110,7 +91,7 @@ export default class{
     animate(){
         const time = this.plane.getUniform('time') + 0.1
 
-        this.moveDrop()
+        // this.moveDrop()
         
         this.plane.setUniform('time', time)
         this.plane.setUniform('currentY', this.ratio)

@@ -68,8 +68,9 @@ export default {
             vec2 size = vec2(eWidth, eResolution.y);
             vec2 rCoord = getCurrentCoord(st, vec2(0), size);
 
-            float nPos = snoise2D(vec2(0.0, seed.x) * vec2(1.0, 5.0));
-            float pos = executeNormalizing(nPos, 0.35, 0.65, -1.0, 1.0);
+            // float nPos = snoise2D(vec2(0.0, seed.x) * vec2(1.0, 5.0));
+            // float pos = executeNormalizing(nPos, 0.35, 0.65, -1.0, 1.0);
+            float pos = 0.5 + seed.y;
             // float posY = eResolution.y * 0.5 / eResolution.y;
 
             float gap = 0.2;
@@ -86,7 +87,8 @@ export default {
 
                 float opacity2 = step(1.0 - currentY, rCoord.y);
 
-                bg.a = (1.0 - opacity) * opacity2;
+                // bg.a = (1.0 - opacity) * opacity2;
+                bg.a = (1.0 - opacity);
             }
 
             gl_FragColor = bg;

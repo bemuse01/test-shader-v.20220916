@@ -1,17 +1,19 @@
 import * as THREE from '../../../lib/three.module.js'
 import Plane from '../../objects/plane.js'
 import Shader from '../shader/test.drop.shader.js'
+import ParentMethod from '../method/test.method.js'
 
 export default class{
-    constructor({group, size, images, textures}){
+    constructor({group, size, images, textures, seed}){
         this.group = group
         this.size = size
         this.images = images
         this.textures = textures
+        this.seed = seed
 
         this.param = {
             width: 10,
-            size: 5
+            size: 16
         }
 
         this.init()
@@ -21,6 +23,7 @@ export default class{
     // init
     init(){
         this.create()
+        this.createTween()
     }
 
 
@@ -46,11 +49,37 @@ export default class{
                     eResolution: {value: new THREE.Vector2(this.size.el.w, this.size.el.h)},
                     oResolution: {value: new THREE.Vector2(this.size.obj.w, this.size.obj.h)},
                     width: {value: width},
-                    uSize: {Value: size}
+                    uSize: {value: size},
+                    uPos: {value: new THREE.Vector2(0, 0)}
                 }
             }
         })
 
         this.group.add(this.drop.get())
+    }
+
+
+    // tween
+    createTween(){
+        const len = ~~(this.seed.image.data.length / 4)
+        const data = Array.from({length: len}, (_, idx) => this.seed.image.data[idx * 4 + 1])
+        const hw = this.size.el.w
+        const hh = this.size.el.h
+
+        const startX = (0.5 + data[0] * 0.1) * hw
+        const endX = data.map(e => (0.5 + e * 0.1) * hw)
+
+        const start = {x: startX, y: hh}
+        const end = {x: endX, y: 0}
+
+        console.log(endX)
+
+        const tw = new TWEEN.Tween(start)
+        .to(end, 5000)
+        .onUpdate(() => this.onUpdateTween(start))
+        .start()
+    }
+    onUpdateTween({x, y}){
+        this.drop.setUniform('uPos', new THREE.Vector2(x, y))
     }
 }

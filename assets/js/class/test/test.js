@@ -4,6 +4,8 @@ import PublicMethod from '../../method/method.js'
 // import Bg from './build/test.bg.build.js'
 // import Lines from './build/test.lines.build.js'
 import Trail from './build/test.trail.build.js'
+import Drop from './build/test.drop.build.js'
+import Group from './build/test.group.build.js'
 
 export default class{
     constructor({app}){
@@ -19,7 +21,9 @@ export default class{
         this.modules = {
             // Bg,
             // Lines
-            Trail
+            // Trail,
+            // Drop
+            Group
         }
         this.group = {}
         this.comp = {}

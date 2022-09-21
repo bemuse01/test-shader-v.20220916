@@ -9,6 +9,7 @@ export default {
         uniform vec2 oResolution;
         uniform float width;
         uniform float uSize;
+        uniform vec2 uPos;
     
         vec2 getCurrentCoord(vec2 fragCoord, vec2 pos, vec2 size){
             vec2 offset = fragCoord - pos;
@@ -19,7 +20,8 @@ export default {
         }
 
         void main(){
-            vec2 coord = gl_FragCoord.xy / eResolution;
+            vec2 coord = gl_FragCoord.xy;
+            vec2 uv = gl_FragCoord.xy / eResolution;
             vec2 st = gl_FragCoord.xy - (eResolution * 0.5);
 
             // get uv
@@ -30,16 +32,16 @@ export default {
             vec2 rCoord = getCurrentCoord(st, vec2(0), size);
 
             // get radius
-            float oSizeRatio = uSize / oResolution.x;
+            // float oSizeRatio = uSize / oResolution.x;
             // float eSize = oSizeRatio * eResolution.x;
 
-            vec2 pos = vec2(0.5);
-            float dist = distance(pos, rCoord);
+            // vec2 pos = eResolution * 0.5;
+            float dist = distance(uPos, coord);
 
             vec4 color = vec4(vec3(1), 0.0);
 
-            if(oSizeRatio < dist){
-                color.a = 1.0;
+            if(dist < uSize){
+                color.w = 1.0;
             }
 
             gl_FragColor = color;
