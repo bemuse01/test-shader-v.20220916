@@ -46,15 +46,15 @@ export default {
             vec2 size = vec2(eWidth, eResolution.y);
             vec2 rCoord = getCurrentCoord(st, vec2(0), size);
 
-            // float nPos = snoise2D(vec2(0.1, coord.y) * vec2(1.0, 5.0));
-            float nPos = time;
-            float posX = executeNormalizing(nPos, 0.475, 0.525, -1.0, 1.0);
+            float nPos = snoise2D(vec2(0.0, coord.y) * vec2(1.0, 5.0));
+            // float nPos = time;
+            float posX = executeNormalizing(nPos, 0.5, 0.5125, -1.0, 1.0);
 
             // get radius
             // float oSizeRatio = uSize / oResolution.x;
             // float eSize = oSizeRatio * eResolution.x;
 
-            vec2 pos = vec2(eResolution.x * posX, uPos.y);
+            vec2 pos = vec2(eResolution.x * posX, eResolution.y * 0.6);
             float dist = distance(pos, fragCoord);
 
             vec4 color = vec4(vec3(1), 0.0);
