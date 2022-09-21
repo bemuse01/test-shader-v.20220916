@@ -17,6 +17,7 @@ export default {
         uniform float uSize;
         uniform vec2 uPos;
         uniform sampler2D uSeed;
+        uniform float time;
 
         varying vec2 vUv;
     
@@ -45,8 +46,9 @@ export default {
             vec2 size = vec2(eWidth, eResolution.y);
             vec2 rCoord = getCurrentCoord(st, vec2(0), size);
 
-            float nPos = snoise2D(vec2(0.0, coord.y) * vec2(1.0, 5.0));
-            float posX = executeNormalizing(nPos, 0.45, 0.55, -1.0, 1.0);
+            // float nPos = snoise2D(vec2(0.1, coord.y) * vec2(1.0, 5.0));
+            float nPos = time;
+            float posX = executeNormalizing(nPos, 0.475, 0.525, -1.0, 1.0);
 
             // get radius
             // float oSizeRatio = uSize / oResolution.x;

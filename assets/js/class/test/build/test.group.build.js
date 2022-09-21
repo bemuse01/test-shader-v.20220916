@@ -31,7 +31,7 @@ export default class{
 
         this.seed = seed
 
-        this.Trail = new Trail({...this, seed: this.seed})
+        this.trail = new Trail({...this, seed: this.seed})
         this.drop = new Drop({...this, seed: this.seed})
     }
     createTexture(){
@@ -53,5 +53,12 @@ export default class{
         seedTexture.needsUpdate = true
 
         return {seed: seedTexture}
+    }
+
+
+    // animate
+    animate(){
+        this.trail.animate()
+        this.drop.animate()
     }
 }

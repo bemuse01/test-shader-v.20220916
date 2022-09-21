@@ -51,7 +51,8 @@ export default class{
                     width: {value: width},
                     uSize: {value: size},
                     uPos: {value: new THREE.Vector2(0, 0)},
-                    uSeed: {value: this.seed}
+                    uSeed: {value: this.seed},
+                    time: {value: 0}
                 }
             }
         })
@@ -80,5 +81,13 @@ export default class{
     }
     onUpdateTween({x, y}){
         this.drop.setUniform('uPos', new THREE.Vector2(x, y))
+    }
+
+
+    // animate
+    animate(){
+        const time = window.performance.now()
+
+        this.drop.setUniform('time', SIMPLEX.noise2D(0.1, time * 0.001))
     }
 }
