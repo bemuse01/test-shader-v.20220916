@@ -30,7 +30,8 @@ export default class{
         ]
 
         this.sources2 = [
-            './assets/src/trail_fg2.png'
+            './assets/src/trail_fg.png',
+            './assets/src/drop_fg2.png'
         ]
 
         this.gpu = new GPU()
