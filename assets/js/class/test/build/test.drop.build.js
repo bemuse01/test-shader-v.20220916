@@ -12,7 +12,7 @@ export default class{
         this.seed = seed
 
         this.param = {
-            width: 10,
+            width: 20,
             size: 16
         }
 

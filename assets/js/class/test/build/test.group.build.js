@@ -12,7 +12,7 @@ export default class{
 
         this.param = {
             width: 10,
-            xRange: 0.15,
+            xRange: 0.3,
         }
 
         this.init()
