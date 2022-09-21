@@ -21,6 +21,7 @@ export default {
         uniform float time;
         uniform sampler2D uTexture;
         uniform sampler2D uSeed;
+        uniform sampler2D tFg;
         uniform float currentY;
 
         varying vec2 vUv;
@@ -43,12 +44,12 @@ export default {
             vec2 uv = (oPosition + oResolution * 0.5) / oResolution;
             // vec2 ratio = (oPosition / oResolution);
 
-            // vec4 color = vec4(vec3(1), 0.0);
-            vec4 color = texture(uTexture, uv);
+            vec4 color = vec4(vec3(1), 0.0);
+            // vec4 color = texture(uTexture, uv);
             vec4 seed = texture(uSeed, vUv);
 
-            color.xyz *= 2.0;
-            color.w = 0.0;
+            // color.xyz *= 2.0;
+            // color.w = 0.0;
 
             float oRatio = width / oResolution.x;
             float eWidth = oRatio * eResolution.x;
@@ -68,15 +69,20 @@ export default {
             float gap = 0.2;
 
             if(rCoord.x > pos - gap && rCoord.x < pos + gap){
+                float puvx = executeNormalizing(rCoord.x, 0.0, 1.0, pos - gap, pos + gap);
+
+                vec4 fg = texture(tFg, vec2(puvx, rCoord.y));
+
                 float dist = distance(pos, rCoord.x);
                 float opacity = executeNormalizing(dist, 0.0, 1.0, 0.0, gap);
 
                 float opacity2 = step(1.0 - currentY, rCoord.y);
                 // float opacity2 = 1.0;
 
-                color.xyz *= 1.0 - opacity * 0.5;
+                // color.xyz *= 1.0 - opacity * 0.5;
                 // color.w = 1.0;
-                color.w = (1.1 - opacity) * opacity2;
+                color = fg;
+                // color.w = (1.1 - opacity) * opacity2;
             }
 
             gl_FragColor = color;

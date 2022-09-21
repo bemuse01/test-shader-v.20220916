@@ -30,7 +30,7 @@ export default class{
         ]
 
         this.sources2 = [
-            './assets/src/trail_fg.png'
+            './assets/src/trail_fg2.png'
         ]
 
         this.gpu = new GPU()
@@ -44,7 +44,7 @@ export default class{
         this.initGroup()
         this.initRenderObject()
 
-        // this.textures = await this.getTextures(this.sources2)
+        this.textures = await this.getTextures(this.sources2)
         this.images = await this.getImages(this.sources)
 
         this.create()

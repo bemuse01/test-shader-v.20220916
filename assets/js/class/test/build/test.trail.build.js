@@ -1,16 +1,15 @@
 import * as THREE from '../../../lib/three.module.js'
-import { Vector2, Vector4 } from '../../../lib/three.module.js'
 import Plane from '../../objects/plane.js'
 import Shader from '../shader/test.trail.shader.js'
 import ParentMethod from '../method/test.method.js'
 import PublicMethod from '../../../method/method.js'
 
 export default class{
-    constructor({group, size, images}){
+    constructor({group, size, images, textures}){
         this.group = group
         this.size = size
         this.images = images
-        // this.textures = textures
+        this.textures = textures
 
         this.param = {
             width: 10,
@@ -37,6 +36,7 @@ export default class{
     }
     createTrail(){
         const [mona] = this.images
+        const [fg] = this.textures
         const texture = ParentMethod.createTextureFromCanvas({img: mona, width: this.size.el.w, height: this.size.el.h})
 
         const {seed} = this.createTexture()
@@ -59,7 +59,8 @@ export default class{
                     time: {value: 0},
                     uTexture: {value: texture},
                     uSeed: {value: seed},
-                    currentY: {value: 0}
+                    currentY: {value: 0},
+                    tFg: {value: fg}
                 }
             }
         })
