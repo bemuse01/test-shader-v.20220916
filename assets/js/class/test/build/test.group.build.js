@@ -41,7 +41,7 @@ export default class{
         const {xRange} = this.param
 
         for(let i = 0; i < height; i++){
-            const ratio = i / height
+            const ratio = 1.0 - i / height
 
             const rn = SIMPLEX.noise2D(0.0 * 0.2, ratio * 5.0)
             const pn = PublicMethod.normalize(rn, -xRange, xRange, -1, 1)

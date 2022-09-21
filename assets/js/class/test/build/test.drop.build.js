@@ -12,7 +12,7 @@ export default class{
         this.seed = seed
 
         this.param = {
-            width: 20,
+            width: 10,
             size: 16
         }
 
@@ -50,7 +50,8 @@ export default class{
                     oResolution: {value: new THREE.Vector2(this.size.obj.w, this.size.obj.h)},
                     width: {value: width},
                     uSize: {value: size},
-                    uPos: {value: new THREE.Vector2(0, 0)}
+                    uPos: {value: new THREE.Vector2(0, 0)},
+                    uSeed: {value: this.seed}
                 }
             }
         })
@@ -71,8 +72,6 @@ export default class{
 
         const start = {x: startX, y: hh}
         const end = {x: endX, y: 0}
-
-        console.log(endX)
 
         const tw = new TWEEN.Tween(start)
         .to(end, 5000)
