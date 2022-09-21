@@ -37,7 +37,7 @@ export default class{
     createTrail(){
         const [mona] = this.images
         const [fg] = this.textures
-        const texture = ParentMethod.createTextureFromCanvas({img: mona, width: this.size.el.w, height: this.size.el.h})
+        const bg = ParentMethod.createTextureFromCanvas({img: mona, width: this.size.el.w, height: this.size.el.h})
 
         const {seed} = this.createTexture()
 
@@ -57,10 +57,10 @@ export default class{
                     oResolution: {value: new THREE.Vector2(this.size.obj.w, this.size.obj.h)},
                     width: {value: this.param.width},
                     time: {value: 0},
-                    uTexture: {value: texture},
+                    tBg: {value: bg},
+                    tFg: {value: fg},
                     uSeed: {value: seed},
                     currentY: {value: 0},
-                    tFg: {value: fg}
                 }
             }
         })
