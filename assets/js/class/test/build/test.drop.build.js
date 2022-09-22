@@ -4,12 +4,13 @@ import Shader from '../shader/test.drop.shader.js'
 import ParentMethod from '../method/test.method.js'
 
 export default class{
-    constructor({group, size, images, textures, seed}){
+    constructor({group, size, images, textures, seed, renderOrder}){
         this.group = group
         this.size = size
         this.images = images
         this.textures = textures
         this.seed = seed
+        this.renderOrder = renderOrder
 
         this.param = {
             width: 10,
@@ -59,6 +60,8 @@ export default class{
             }
         })
 
+        this.drop.get().renderOrder = this.renderOrder
+
         this.group.add(this.drop.get())
     }
 
@@ -83,6 +86,12 @@ export default class{
     }
     onUpdateTween({x, y}){
         this.drop.setUniform('uPos', new THREE.Vector2(x, y))
+    }
+
+
+    // get
+    getObject(){
+        return this.drop
     }
 
 

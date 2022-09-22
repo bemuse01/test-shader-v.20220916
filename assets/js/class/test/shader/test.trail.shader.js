@@ -87,8 +87,8 @@ export default {
 
                 float opacity2 = step(1.0 - currentY, rCoord.y);
 
-                // bg.a = (1.0 - opacity) * opacity2;
-                bg.a = (1.0 - opacity);
+                bg.a = (1.0 - opacity) * opacity2;
+                // bg.a = (1.0 - opacity);
             }
 
             gl_FragColor = bg;

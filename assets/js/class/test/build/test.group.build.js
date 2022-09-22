@@ -31,8 +31,9 @@ export default class{
 
         this.seed = seed
 
-        this.trail = new Trail({...this, seed: this.seed})
-        this.drop = new Drop({...this, seed: this.seed})
+        this.drop = new Drop({...this, seed: this.seed, renderOrder: 2})
+
+        this.trail = new Trail({...this, seed: this.seed, renderOrder: 1})
     }
     createTexture(){
         const seed = []

@@ -5,12 +5,14 @@ import ParentMethod from '../method/test.method.js'
 import PublicMethod from '../../../method/method.js'
 
 export default class{
-    constructor({group, size, images, textures, seed}){
+    constructor({group, size, images, textures, seed, renderOrder, drop}){
         this.group = group
         this.size = size
         this.images = images
         this.textures = textures
         this.seed = seed
+        this.renderOrder = renderOrder
+        this.drop = drop.getObject()
 
         this.param = {
             width: 10,
@@ -64,6 +66,8 @@ export default class{
             }
         })
 
+        this.plane.get().renderOrder = this.renderOrder
+
         this.group.add(this.plane.get())
     }
     createDrop(){
@@ -91,10 +95,12 @@ export default class{
     animate(){
         const time = this.plane.getUniform('time') + 0.1
 
-        // this.moveDrop()
+        const currentY = 1 - this.drop.getUniform('uPos').y / this.size.el.h
+   
+        // console.log(currentY)
         
         this.plane.setUniform('time', time)
-        this.plane.setUniform('currentY', this.ratio)
+        this.plane.setUniform('currentY', currentY)
 
     }
     moveDrop(){
