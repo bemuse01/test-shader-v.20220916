@@ -68,7 +68,7 @@ export default {
             vec2 size = vec2(eWidth, eResolution.y);
             vec2 rCoord = getCurrentCoord(st, vec2(0), size);
 
-            float nPos = snoise2D(vec2(0.0, coord.y) * vec2(1.0, 5.0));
+            float nPos = snoise2D(vec2(0.0, coord.y) * vec2(1.0, 2.5));
             float pos = executeNormalizing(nPos, 0.2, 0.8, -1.0, 1.0);
             // float pos = 0.5 + seed.y;
             // float posY = eResolution.y * 0.5 / eResolution.y;
@@ -80,7 +80,7 @@ export default {
 
                 vec4 fg = texture(tFg, vec2(uvX, rCoord.y));
 
-                bg.rgb = blendOverlay(bg.rgb, fg.rgb * 1.0, 1.0);
+                bg.rgb = blendOverlay(bg.rgb, fg.rgb * 1.0, 1.125);
 
                 float dist = distance(pos, rCoord.x);
                 float opacity = executeNormalizing(dist, 0.0, 1.0, 0.0, gap);

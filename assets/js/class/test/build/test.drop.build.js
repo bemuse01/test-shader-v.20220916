@@ -17,6 +17,8 @@ export default class{
             size: 16
         }
 
+        this.posY = this.size.obj.h
+
         this.init()
     }
 
@@ -80,8 +82,9 @@ export default class{
         const end = {x: endX, y: 0}
 
         const tw = new TWEEN.Tween(start)
-        .to(end, 5000)
+        .to(end, 1500)
         .onUpdate(() => this.onUpdateTween(start))
+        .repeat(Infinity)
         .start()
     }
     onUpdateTween({x, y}){
@@ -100,5 +103,7 @@ export default class{
         const time = window.performance.now()
 
         this.drop.setUniform('time', SIMPLEX.noise2D(0.1, time * 0.001))
+    }
+    moveDrop(){
     }
 }

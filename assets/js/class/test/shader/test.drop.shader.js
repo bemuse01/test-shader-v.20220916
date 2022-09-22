@@ -60,7 +60,7 @@ export default {
             vec2 size = vec2(eWidth, eResolution.y);
             vec2 rCoord = getCurrentCoord(st, vec2(0), size);
 
-            float nPos = snoise2D(vec2(0.0, uPos.y / eResolution.y) * vec2(1.0, 5.0));
+            float nPos = snoise2D(vec2(0.0, uPos.y / eResolution.y) * vec2(1.0, 2.5));
             float posX = executeNormalizing(nPos, 0.4875, 0.5125, -1.0, 1.0);
 
             // get radius
