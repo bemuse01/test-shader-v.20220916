@@ -13,6 +13,7 @@ export default class{
         this.param = {
             width: 10,
             xRange: 0.3,
+            count: 10
         }
 
         this.init()
@@ -27,12 +28,29 @@ export default class{
 
     // create
     create(){
+        const {position} = this.createAttribute()
         const {seed} = this.createTexture()
 
         this.seed = seed
+        this.position = new Float32Array(position)
 
-        this.drop = new Drop({...this, seed: this.seed, renderOrder: 2})
-        this.trail = new Trail({...this, seed: this.seed, renderOrder: 1})
+        this.drop = new Drop({...this, seed: this.seed, renderOrder: 2, position: this.position})
+        this.trail = new Trail({...this, seed: this.seed, renderOrder: 1, position: this.position})
+    }
+    createAttribute(){
+        const {count} = this.param
+
+        const w = this.size.obj.w
+
+        const position = []
+
+        for(let i = 0; i < count; i++){
+            const x = Math.random() * w - w / 2
+
+            position.push(x, 0)
+        }
+
+        return {position}
     }
     createTexture(){
         const seed = []

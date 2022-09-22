@@ -1,20 +1,23 @@
 import * as THREE from '../../../lib/three.module.js'
 import Plane from '../../objects/plane.js'
+import InstancedPlane from '../../objects/InstancedPlane.js'
 import Shader from '../shader/test.drop.shader.js'
 import ParentMethod from '../method/test.method.js'
 
 export default class{
-    constructor({group, size, images, textures, seed, renderOrder}){
+    constructor({group, size, images, textures, seed, position, renderOrder}){
         this.group = group
         this.size = size
         this.images = images
         this.textures = textures
         this.seed = seed
+        this.position = position
         this.renderOrder = renderOrder
 
         this.param = {
             width: 10,
-            size: 16
+            size: 16,
+            count: 10
         }
 
         this.posY = this.size.obj.h
@@ -36,9 +39,10 @@ export default class{
         const [_, fg] = this.textures
         const bg = ParentMethod.createTextureFromCanvas({img: mona, width: this.size.el.w, height: this.size.el.h})
 
-        const {width, size} = this.param
+        const {width, size, count} = this.param
 
-        this.drop = new Plane({
+        this.drop = new InstancedPlane({
+            count,
             width,
             height: this.size.obj.h,
             widthSeg: 1,
@@ -62,9 +66,13 @@ export default class{
             }
         })
 
+        this.drop.setInstancedAttribute('aPosition', this.position, 2)
+
         this.drop.get().renderOrder = this.renderOrder
 
         this.group.add(this.drop.get())
+    }
+    createAttributes(){
     }
 
 

@@ -2,15 +2,21 @@ import ShaderMethod from '../../../method/method.shader.js'
 
 export default {
     vertex: `
+        attribute vec2 aPosition;
+
         varying vec2 vUv;
-        // varying vec2 vPosition;
+        varying vec2 vPosition;
         varying vec2 oPosition;
 
         void main(){
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            vec3 nPosition = position;
+
+            nPosition.xy += aPosition;
+
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(nPosition, 1.0);
 
             vUv = uv;
-            // vPosition = aPosition.xy;
+            vPosition = aPosition.xy;
             oPosition = position.xy;
         }
     `,
@@ -21,10 +27,10 @@ export default {
         uniform float time;
         uniform sampler2D tBg;
         uniform sampler2D tFg;
-        uniform sampler2D uSeed;
         uniform float currentY;
 
         varying vec2 vUv;
+        varying vec2 vPosition;
         varying vec2 oPosition;
 
         ${ShaderMethod.snoise2D()}
@@ -43,21 +49,25 @@ export default {
         }
 
         vec2 getCurrentCoord(vec2 fragCoord, vec2 pos, vec2 size){
-            vec2 offset = fragCoord - pos;
-            vec2 halfSize = size * 0.5;
-            vec2 coord = offset / halfSize;
+            vec2 oRatio = (vPosition + oResolution * 0.5) / oResolution;
+            vec2 ePos = oRatio * eResolution;
 
-            return coord * 0.5 + 0.5;
+            vec2 offset = ePos;
+            vec2 halfSize = size * 0.5;
+            float coordX = executeNormalizing(fragCoord.x, 0.0, 1.0, offset.x - halfSize.x, offset.x + halfSize.x); 
+            float coordY = executeNormalizing(fragCoord.y, 0.0, 1.0, offset.y - halfSize.y, offset.y + halfSize.y); 
+
+            return vec2(coordX, coordY);
         }
 
         void main(){
+            vec2 fragCoord = gl_FragCoord.xy;
             vec2 coord = gl_FragCoord.xy / eResolution;
             vec2 st = gl_FragCoord.xy - (eResolution * 0.5);
-            vec2 uv = (oPosition + oResolution * 0.5) / oResolution;
-            // vec2 ratio = (oPosition / oResolution);
 
-            vec4 bg = texture(tBg, uv);
-            vec4 seed = texture(uSeed, vUv);
+            vec2 coord2 = (vPosition + oResolution * 0.5) / oResolution;
+            vec2 ratio = (oPosition / oResolution);
+            vec4 bg = texture(tBg, coord2 + ratio);
 
             // .xyz *= 2.0;
             bg.a = 0.0;
@@ -66,12 +76,10 @@ export default {
             float eWidth = oRatio * eResolution.x;
 
             vec2 size = vec2(eWidth, eResolution.y);
-            vec2 rCoord = getCurrentCoord(st, vec2(0), size);
+            vec2 rCoord = getCurrentCoord(fragCoord, vec2(0), size);
 
             float nPos = snoise2D(vec2(0.0, coord.y) * vec2(1.0, 2.5));
             float pos = executeNormalizing(nPos, 0.2, 0.8, -1.0, 1.0);
-            // float pos = 0.5 + seed.y;
-            // float posY = eResolution.y * 0.5 / eResolution.y;
 
             float gap = 0.2;
 
@@ -89,6 +97,8 @@ export default {
 
                 bg.a = (1.0 - opacity) * opacity2;
                 // bg.a = (1.0 - opacity);
+
+                // bg.a = 1.0;
             }
 
             gl_FragColor = bg;
