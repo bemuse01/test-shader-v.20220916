@@ -46,6 +46,8 @@ export default class{
                 fragmentShader: Shader.fragment,
                 transparent: true,
                 uniforms: {
+                    tBg: {value: bg},
+                    tFg: {value: fg},
                     eResolution: {value: new THREE.Vector2(this.size.el.w, this.size.el.h)},
                     oResolution: {value: new THREE.Vector2(this.size.obj.w, this.size.obj.h)},
                     width: {value: width},
