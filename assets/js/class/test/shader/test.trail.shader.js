@@ -105,7 +105,7 @@ export default {
                 float dist = distance(pos, rCoord.x);
                 float opacity = executeNormalizing(dist, 0.0, 1.0, 0.0, gap);
 
-                float opacity2 = step(currentY, rCoord.y);
+                float opacity2 = smoothstep(rCoord.y, rCoord.y * 0.95, currentY);
 
                 bg.a = (1.1 - opacity) * opacity2 * vOpacity;
             }

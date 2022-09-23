@@ -70,18 +70,35 @@ export default {
 
             vec2 pos = vec2(eResolution.x * posX + ePos.x, vPosY);
             float dist = distance(pos, fragCoord);
+            // float distX = distance(pos.x, fragCoord.x);
+            // float distY = distance(pos.y, fragCoord.y);
 
             vec4 bg = texture(tBg, coord);
+            // vec4 bg = vec4(1);
   
             bg.a = 0.0;
 
-            if(dist < radius){
-                float coordX = executeNormalizing(fragCoord.x, 0.0, 1.0, pos.x - radius, pos.x + radius);
-                float coordY = executeNormalizing(fragCoord.y, 0.0, 1.0, pos.y - radius, pos.y + radius);
+            float radX = radius * 0.8;
+            float radY = radius * 1.25;
+
+            float rx = fragCoord.x - pos.x;
+            float ry = fragCoord.y - pos.y;
+            float radian = atan(ry, rx);
+
+            float px = cos(radian) * radX;
+            float py = sin(radian) * radY;
+            vec2 p = vec2(px, py);
+
+            if(dist < length(p)){
+                float coordX = executeNormalizing(fragCoord.x, 0.0, 1.0, pos.x - length(p), pos.x + length(p));
+                float coordY = executeNormalizing(fragCoord.y, 0.0, 1.0, pos.y - length(p), pos.y + length(p));
                 vec4 fg = texture(tFg, vec2(coordX, coordY));
 
+                float opacity = 1.0 - coordY;
+
                 bg.rgb = blendOverlay(bg.rgb, fg.rgb * 1.0, 1.0);
-                bg.a = 1.0;
+                bg.a = opacity;
+                // bg.a = 1.0;
             }
 
             gl_FragColor = bg;
