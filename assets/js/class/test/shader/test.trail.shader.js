@@ -5,12 +5,14 @@ export default {
         attribute vec2 aPosition;
         attribute float posY;
         attribute float seed;
+        attribute float opacity;
 
         varying vec2 vUv;
         varying vec2 vPosition;
         varying vec2 oPosition;
         varying float vPosY;
         varying float vSeed;
+        varying float vOpacity;
 
         void main(){
             vec3 nPosition = position;
@@ -24,6 +26,7 @@ export default {
             oPosition = position.xy;
             vPosY = posY;
             vSeed = seed;
+            vOpacity = opacity;
         }
     `,
     fragment: `
@@ -40,6 +43,7 @@ export default {
         varying vec2 oPosition;
         varying float vPosY;
         varying float vSeed;
+        varying float vOpacity;
 
         ${ShaderMethod.snoise2D()}
         ${ShaderMethod.executeNormalizing()}
@@ -105,7 +109,7 @@ export default {
 
                 float opacity2 = step(currentY, rCoord.y);
 
-                bg.a = (1.0 - opacity) * opacity2;
+                bg.a = (1.1 - opacity) * opacity2 * vOpacity;
             }
 
             gl_FragColor = bg;

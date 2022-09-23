@@ -21,6 +21,7 @@ export default class{
         }
 
         this.momentum = Array.from({length: this.param.count}, _ => -(Math.random() * 1 + 1))
+        this.play = Array.from({length: this.param.count}, _ => true)
 
         this.init()
     }
@@ -35,12 +36,13 @@ export default class{
 
     // create
     create(){
-        const {position, posY, seed} = this.createAttribute()
+        const {position, posY, seed, opacity} = this.createAttribute()
 
         this.attributes = {
             position: new Float32Array(position),
             posY: new Float32Array(posY),
-            seed: new Float32Array(seed)
+            seed: new Float32Array(seed),
+            opacity: new Float32Array(opacity)
         }
         
         this.drop = new Drop({...this, renderOrder: 2, attributes: this.attributes})
@@ -55,6 +57,7 @@ export default class{
         const position = []
         const posY = []
         const seed = []
+        const opacity = []
 
         for(let i = 0; i < count; i++){
             const x = Math.random() * w - w / 2
@@ -67,9 +70,13 @@ export default class{
             
             const s = Math.random() * 0.4 + 0.4
             seed.push(s)
+
+
+            const o = 1
+            opacity.push(o)
         }
 
-        return {position, posY, seed}
+        return {position, posY, seed, opacity}
     }
 
 
@@ -90,26 +97,42 @@ export default class{
 
             posY[i] += this.momentum[i]
 
-            if(posY[i] < 0){
-                posY[i] = h
-                this.momentum[i] = Math.random() * -1
+            if(posY[i] < -10){
+                if(this.play[i] === false) continue
+                this.play[i] = false
+                this.createTween(i)
             }
         }
     }
 
 
     // tween
-    createTween(){
-        const start = {}
-        const end = {}
+    createTween(idx){
+        const posY = this.attributes.posY
+        const opacity = this.attributes.opacity
+
+        const start = {o: 1}
+        const end = {o: 0}
 
         const tw = new TWEEN.Tween(start)
-        .to(end, 1500)
-        .onUpdate(() => this.onUpdateTween())
-        .repeat(Infinity)
+        .to(end, 1000)
+        .onUpdate(() => this.onUpdateTween(idx, opacity, start))
+        .onComplete(() => this.onCompleteTween(idx, posY, opacity))
+        // .repeat(Infinity)
         // .delay(Math.random() * 1000)
         .start()
     }
-    onUpdateTween(){
+    onUpdateTween(idx, opacity, {o}){
+        opacity[idx] = o
+    }
+    onCompleteTween(idx, posY, opacity){
+        const h = this.size.el.h
+
+        posY[idx] = h + 10
+        opacity[idx] = 1
+
+        this.momentum[idx] = -(Math.random() * 1 + 1)
+
+        this.play[idx] = true
     }
 }

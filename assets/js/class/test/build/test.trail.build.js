@@ -67,6 +67,7 @@ export default class{
         this.plane.setInstancedAttribute('aPosition', this.attributes.position, 2)
         this.plane.setInstancedAttribute('posY', this.attributes.posY, 1)
         this.plane.setInstancedAttribute('seed', this.attributes.seed, 1)
+        this.plane.setInstancedAttribute('opacity', this.attributes.opacity, 1)
 
         this.plane.get().renderOrder = this.renderOrder
 
@@ -81,5 +82,6 @@ export default class{
         this.plane.setUniform('time', time)
 
         this.plane.getAttribute('posY').needsUpdate = true
+        this.plane.getAttribute('opacity').needsUpdate = true
     }
 }
