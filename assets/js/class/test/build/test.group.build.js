@@ -14,14 +14,19 @@ export default class{
             width: 10,
             xRange: 0.3,
             count: 10,
+            radius: 16,
             momentum: {
                 min: 0.2,
                 max: 0.3
             }
         }
 
-        this.momentum = Array.from({length: this.param.count}, _ => -(Math.random() * 1 + 1))
+        this.velocity = Array.from({length: this.param.count}, _ => 0)
+        this.timer = Array.from({length: this.param.count}, _ => Math.random())
+        this.delay = Array.from({length: this.param.count}, _ => 0)
         this.play = Array.from({length: this.param.count}, _ => true)
+
+        this.radius = this.param.radius * 2
 
         this.init()
     }
@@ -64,11 +69,11 @@ export default class{
             position.push(x, 0)
 
 
-            const y = h
+            const y = h + this.radius
             posY.push(y)
 
             
-            const s = Math.random() * 0.4 + 0.4
+            const s = Math.random() * 1
             seed.push(s)
 
 
@@ -88,18 +93,24 @@ export default class{
     }
     moveDrop(){
         const {count, momentum} = this.param
-        const h = this.size.el.h
-
         const posY = this.attributes.posY
+        const velocity = this.velocity
+        const timer = this.timer
+        const delay = this.delay
+        const play = this.play
 
         for(let i = 0; i < count; i++){
-            this.momentum[i] -= THREE.MathUtils.randFloat(momentum.min, momentum.max)
+            const momen = THREE.MathUtils.randFloat(momentum.min, momentum.max)
 
-            posY[i] += this.momentum[i]
+            delay[i] += 0.01
 
-            if(posY[i] < -10){
-                if(this.play[i] === false) continue
-                this.play[i] = false
+            if(delay[i] > timer[i]) velocity[i] -= momen
+
+            posY[i] += velocity[i]
+
+            if(posY[i] < -this.radius){
+                if(play[i] === false) continue
+                play[i] = false
                 this.createTween(i)
             }
         }
@@ -128,11 +139,13 @@ export default class{
     onCompleteTween(idx, posY, opacity){
         const h = this.size.el.h
 
-        posY[idx] = h + 10
+        posY[idx] = h + this.radius
         opacity[idx] = 1
 
-        this.momentum[idx] = -(Math.random() * 1 + 1)
+        this.velocity[idx] = -(Math.random() * 1 + 1)
 
         this.play[idx] = true
+    
+        this.delay[idx] = 0
     }
 }
