@@ -4,7 +4,7 @@ import Shader from '../shader/test.trail.shader.js'
 import ParentMethod from '../method/test.method.js'
 
 export default class{
-    constructor({group, size, images, textures, attributes, renderOrder}){
+    constructor({group, size, images, textures, attributes, renderOrder, param}){
         this.group = group
         this.size = size
         this.images = images
@@ -13,10 +13,7 @@ export default class{
         this.renderOrder = renderOrder
 
         this.param = {
-            width: 10,
-            xRange: 0.15,
-            xDist: 5,
-            count: 10,
+            ...param
         }
 
         this.ratio = 0
@@ -56,10 +53,8 @@ export default class{
                     eResolution: {value: new THREE.Vector2(this.size.el.w, this.size.el.h)},
                     oResolution: {value: new THREE.Vector2(this.size.obj.w, this.size.obj.h)},
                     width: {value: this.param.width},
-                    time: {value: 0},
                     tBg: {value: bg},
                     tFg: {value: fg},
-                    currentY: {value: 0},
                 }
             }
         })
@@ -77,10 +72,6 @@ export default class{
 
     // animate
     animate(){
-        const time = this.plane.getUniform('time') + 0.1
-
-        this.plane.setUniform('time', time)
-
         this.plane.getAttribute('posY').needsUpdate = true
         this.plane.getAttribute('opacity').needsUpdate = true
     }

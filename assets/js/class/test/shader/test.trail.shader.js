@@ -33,10 +33,8 @@ export default {
         uniform vec2 eResolution;
         uniform vec2 oResolution;
         uniform float width;
-        uniform float time;
         uniform sampler2D tBg;
         uniform sampler2D tFg;
-        // uniform float currentY;
 
         varying vec2 vUv;
         varying vec2 vPosition;

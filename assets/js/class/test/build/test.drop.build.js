@@ -4,7 +4,7 @@ import Shader from '../shader/test.drop.shader.js'
 import ParentMethod from '../method/test.method.js'
 
 export default class{
-    constructor({group, size, images, textures, attributes, renderOrder}){
+    constructor({group, size, images, textures, attributes, renderOrder, param}){
         this.group = group
         this.size = size
         this.images = images
@@ -13,9 +13,7 @@ export default class{
         this.renderOrder = renderOrder
 
         this.param = {
-            width: 10,
-            size: 16,
-            count: 10
+            ...param,
         }
 
         this.init()
@@ -34,7 +32,7 @@ export default class{
         const [_, fg] = this.textures
         const bg = ParentMethod.createTextureFromCanvas({img: mona, width: this.size.el.w, height: this.size.el.h})
 
-        const {width, size, count} = this.param
+        const {width, radius, count} = this.param
 
         this.drop = new InstancedPlane({
             count,
@@ -53,9 +51,7 @@ export default class{
                     eResolution: {value: new THREE.Vector2(this.size.el.w, this.size.el.h)},
                     oResolution: {value: new THREE.Vector2(this.size.obj.w, this.size.obj.h)},
                     width: {value: width},
-                    uSize: {value: size},
-                    uPos: {value: new THREE.Vector2(0, 0)},
-                    time: {value: 0}
+                    radius: {value: radius},
                 }
             }
         })
@@ -80,10 +76,6 @@ export default class{
 
     // animate
     animate(){
-        const time = window.performance.now()
-
-        this.drop.setUniform('time', SIMPLEX.noise2D(0.1, time * 0.001))
-
         this.drop.getAttribute('posY').needsUpdate = true
     }
 }

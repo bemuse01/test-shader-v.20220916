@@ -28,9 +28,7 @@ export default {
         uniform vec2 eResolution;
         uniform vec2 oResolution;
         uniform float width;
-        uniform float uSize;
-        uniform vec2 uPos;
-        uniform float time;
+        uniform float radius;
         uniform sampler2D tBg;
         uniform sampler2D tFg;
 
@@ -77,9 +75,9 @@ export default {
   
             bg.a = 0.0;
 
-            if(dist < uSize){
-                float coordX = executeNormalizing(fragCoord.x, 0.0, 1.0, pos.x - uSize, pos.x + uSize);
-                float coordY = executeNormalizing(fragCoord.y, 0.0, 1.0, pos.y - uSize, pos.y + uSize);
+            if(dist < radius){
+                float coordX = executeNormalizing(fragCoord.x, 0.0, 1.0, pos.x - radius, pos.x + radius);
+                float coordY = executeNormalizing(fragCoord.y, 0.0, 1.0, pos.y - radius, pos.y + radius);
                 vec4 fg = texture(tFg, vec2(coordX, coordY));
 
                 bg.rgb = blendOverlay(bg.rgb, fg.rgb * 1.0, 1.0);

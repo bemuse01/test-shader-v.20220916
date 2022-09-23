@@ -50,8 +50,8 @@ export default class{
             opacity: new Float32Array(opacity)
         }
         
-        this.drop = new Drop({...this, renderOrder: 2, attributes: this.attributes})
-        this.trail = new Trail({...this, renderOrder: 1, attributes: this.attributes})
+        this.drop = new Drop({...this, renderOrder: 2, attributes: this.attributes, param: this.param})
+        this.trail = new Trail({...this, renderOrder: 1, attributes: this.attributes, param: this.param})
     }
     createAttribute(){
         const {count} = this.param
