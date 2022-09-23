@@ -1,20 +1,16 @@
 import * as THREE from '../../../lib/three.module.js'
-import Plane from '../../objects/plane.js'
 import InstancedPlane from '../../objects/InstancedPlane.js'
 import Shader from '../shader/test.trail.shader.js'
 import ParentMethod from '../method/test.method.js'
-import PublicMethod from '../../../method/method.js'
 
 export default class{
-    constructor({group, size, images, textures, position, posY, renderOrder, drop}){
+    constructor({group, size, images, textures, attributes, renderOrder}){
         this.group = group
         this.size = size
         this.images = images
         this.textures = textures
-        this.position = position
-        this.posY = posY
+        this.attributes = attributes
         this.renderOrder = renderOrder
-        this.drop = drop.getObject()
 
         this.param = {
             width: 10,
@@ -68,8 +64,9 @@ export default class{
             }
         })
 
-        this.plane.setInstancedAttribute('aPosition', this.position, 2)
-        this.plane.setInstancedAttribute('posY', this.posY, 1)
+        this.plane.setInstancedAttribute('aPosition', this.attributes.position, 2)
+        this.plane.setInstancedAttribute('posY', this.attributes.posY, 1)
+        this.plane.setInstancedAttribute('seed', this.attributes.seed, 1)
 
         this.plane.get().renderOrder = this.renderOrder
 
@@ -77,20 +74,12 @@ export default class{
     }
 
 
-    // texture
-    createTexture(){
-    }
-
-
     // animate
     animate(){
         const time = this.plane.getUniform('time') + 0.1
 
-        const currentY = 1 - this.drop.getUniform('uPos').y / this.size.el.h
-
         this.plane.setUniform('time', time)
-        this.plane.setUniform('currentY', currentY)
-        
+
         this.plane.getAttribute('posY').needsUpdate = true
     }
 }

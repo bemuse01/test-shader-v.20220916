@@ -1,17 +1,15 @@
 import * as THREE from '../../../lib/three.module.js'
-import Plane from '../../objects/plane.js'
 import InstancedPlane from '../../objects/InstancedPlane.js'
 import Shader from '../shader/test.drop.shader.js'
 import ParentMethod from '../method/test.method.js'
 
 export default class{
-    constructor({group, size, images, textures, position, posY, renderOrder}){
+    constructor({group, size, images, textures, attributes, renderOrder}){
         this.group = group
         this.size = size
         this.images = images
         this.textures = textures
-        this.position = position
-        this.posY = posY
+        this.attributes = attributes
         this.renderOrder = renderOrder
 
         this.param = {
@@ -62,8 +60,9 @@ export default class{
             }
         })
 
-        this.drop.setInstancedAttribute('aPosition', this.position, 2)
-        this.drop.setInstancedAttribute('posY', this.posY, 1)
+        this.drop.setInstancedAttribute('aPosition', this.attributes.position, 2)
+        this.drop.setInstancedAttribute('posY', this.attributes.posY, 1)
+        this.drop.setInstancedAttribute('seed', this.attributes.seed, 1)
 
         this.drop.get().renderOrder = this.renderOrder
 
@@ -84,7 +83,7 @@ export default class{
         const time = window.performance.now()
 
         this.drop.setUniform('time', SIMPLEX.noise2D(0.1, time * 0.001))
-        
+
         this.drop.getAttribute('posY').needsUpdate = true
     }
 }

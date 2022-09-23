@@ -4,11 +4,13 @@ export default {
     vertex: `
         attribute vec2 aPosition;
         attribute float posY;
+        attribute float seed;
 
         varying vec2 vUv;
         varying vec2 vPosition;
         varying vec2 oPosition;
         varying float vPosY;
+        varying float vSeed;
 
         void main(){
             vec3 nPosition = position;
@@ -21,6 +23,7 @@ export default {
             vPosition = aPosition.xy;
             oPosition = position.xy;
             vPosY = posY;
+            vSeed = seed;
         }
     `,
     fragment: `
@@ -36,6 +39,7 @@ export default {
         varying vec2 vPosition;
         varying vec2 oPosition;
         varying float vPosY;
+        varying float vSeed;
 
         ${ShaderMethod.snoise2D()}
         ${ShaderMethod.executeNormalizing()}
@@ -73,7 +77,7 @@ export default {
             vec2 ratio = (oPosition / oResolution);
             vec4 bg = texture(tBg, coord2 + ratio);
 
-            // .xyz *= 2.0;
+            // bg.rgb *= 2.0;
             bg.a = 0.0;
 
             float oRatio = width / oResolution.x;
@@ -82,7 +86,7 @@ export default {
             vec2 size = vec2(eWidth, eResolution.y);
             vec2 rCoord = getCurrentCoord(fragCoord, vec2(0), size);
 
-            float nPos = snoise2D(vec2(0.0, coord.y) * vec2(1.0, 2.5));
+            float nPos = snoise2D(vec2(0.0, coord.y) * vec2(1.0, 2.5 * vSeed));
             float pos = executeNormalizing(nPos, 0.2, 0.8, -1.0, 1.0);
 
             float gap = 0.2;
@@ -102,9 +106,6 @@ export default {
                 float opacity2 = step(currentY, rCoord.y);
 
                 bg.a = (1.0 - opacity) * opacity2;
-                // bg.a = (1.0 - opacity);
-
-                // bg.a = 1.0;
             }
 
             gl_FragColor = bg;
