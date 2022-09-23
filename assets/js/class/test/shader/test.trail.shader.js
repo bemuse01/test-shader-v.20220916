@@ -3,10 +3,12 @@ import ShaderMethod from '../../../method/method.shader.js'
 export default {
     vertex: `
         attribute vec2 aPosition;
+        attribute float posY;
 
         varying vec2 vUv;
         varying vec2 vPosition;
         varying vec2 oPosition;
+        varying float vPosY;
 
         void main(){
             vec3 nPosition = position;
@@ -18,6 +20,7 @@ export default {
             vUv = uv;
             vPosition = aPosition.xy;
             oPosition = position.xy;
+            vPosY = posY;
         }
     `,
     fragment: `
@@ -27,11 +30,12 @@ export default {
         uniform float time;
         uniform sampler2D tBg;
         uniform sampler2D tFg;
-        uniform float currentY;
+        // uniform float currentY;
 
         varying vec2 vUv;
         varying vec2 vPosition;
         varying vec2 oPosition;
+        varying float vPosY;
 
         ${ShaderMethod.snoise2D()}
         ${ShaderMethod.executeNormalizing()}
@@ -83,6 +87,8 @@ export default {
 
             float gap = 0.2;
 
+            float currentY = vPosY / eResolution.y;
+
             if(rCoord.x > pos - gap && rCoord.x < pos + gap){
                 float uvX = executeNormalizing(rCoord.x, 0.0, 1.0, pos - gap, pos + gap);
 
@@ -93,7 +99,7 @@ export default {
                 float dist = distance(pos, rCoord.x);
                 float opacity = executeNormalizing(dist, 0.0, 1.0, 0.0, gap);
 
-                float opacity2 = step(1.0 - currentY, rCoord.y);
+                float opacity2 = step(currentY, rCoord.y);
 
                 bg.a = (1.0 - opacity) * opacity2;
                 // bg.a = (1.0 - opacity);

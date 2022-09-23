@@ -13,8 +13,15 @@ export default class{
         this.param = {
             width: 10,
             xRange: 0.3,
-            count: 10
+            count: 10,
+            momentum: {
+                min: 0.05,
+                max: 0.1
+            }
         }
+
+        this.momentum = Array.from({length: this.param.count}, _ => Math.random() * -1)
+        console.log(this.momentum)
 
         this.init()
     }
@@ -23,34 +30,43 @@ export default class{
     // init
     init(){
         this.create()
+        // this.initTween()
     }
 
 
     // create
     create(){
-        const {position} = this.createAttribute()
+        const {position, posY} = this.createAttribute()
         const {seed} = this.createTexture()
 
         this.seed = seed
         this.position = new Float32Array(position)
+        this.posY = new Float32Array(posY)
 
-        this.drop = new Drop({...this, seed: this.seed, renderOrder: 2, position: this.position})
-        this.trail = new Trail({...this, seed: this.seed, renderOrder: 1, position: this.position})
+        this.drop = new Drop({...this, renderOrder: 2, position: this.position, posY: this.posY})
+        this.trail = new Trail({...this, renderOrder: 1, position: this.position, posY: this.posY})
     }
     createAttribute(){
         const {count} = this.param
 
         const w = this.size.obj.w
+        const h = this.size.el.h
 
         const position = []
+        const posY = []
 
         for(let i = 0; i < count; i++){
             const x = Math.random() * w - w / 2
 
             position.push(x, 0)
+
+
+            const y = h
+
+            posY.push(y)
         }
 
-        return {position}
+        return {position, posY}
     }
     createTexture(){
         const seed = []
@@ -76,7 +92,48 @@ export default class{
 
     // animate
     animate(){
+        this.moveDrop()
         this.trail.animate()
         this.drop.animate()
     }
+    moveDrop(){
+        const {count, momentum} = this.param
+        const h = this.size.el.h
+
+        for(let i = 0; i < count; i++){
+            this.momentum[i] -= THREE.MathUtils.randFloat(momentum.min, momentum.max)
+
+            this.posY[i] += this.momentum[i]
+
+            if(this.posY[i] < 0){
+                this.posY[i] = h
+                this.momentum[i] = Math.random() * -1
+            }
+        }
+    }
+
+
+    // tween
+    // initTween(){
+    //     for(let i = 0; i < this.param.count; i++){
+    //         this.createTween(i)
+    //     }
+    // }
+    // createTween(idx){
+    //     const hh = this.size.el.h
+
+    //     const start = {y: hh}
+    //     const end = {y: 0}
+
+    //     const tw = new TWEEN.Tween(start)
+    //     .to(end, 1500)
+    //     .onUpdate(() => this.onUpdateTween(idx, start))
+    //     .repeat(Infinity)
+    //     // .delay(Math.random() * 1000)
+    //     .start()
+    // }
+    // onUpdateTween(idx, {y}){
+        
+    //     this.posY[idx] = y
+    // }
 }

@@ -6,13 +6,13 @@ import ParentMethod from '../method/test.method.js'
 import PublicMethod from '../../../method/method.js'
 
 export default class{
-    constructor({group, size, images, textures, seed, position, renderOrder, drop}){
+    constructor({group, size, images, textures, position, posY, renderOrder, drop}){
         this.group = group
         this.size = size
         this.images = images
         this.textures = textures
-        this.seed = seed
         this.position = position
+        this.posY = posY
         this.renderOrder = renderOrder
         this.drop = drop.getObject()
 
@@ -63,13 +63,13 @@ export default class{
                     time: {value: 0},
                     tBg: {value: bg},
                     tFg: {value: fg},
-                    uSeed: {value: this.seed},
                     currentY: {value: 0},
                 }
             }
         })
 
         this.plane.setInstancedAttribute('aPosition', this.position, 2)
+        this.plane.setInstancedAttribute('posY', this.posY, 1)
 
         this.plane.get().renderOrder = this.renderOrder
 
@@ -90,5 +90,7 @@ export default class{
 
         this.plane.setUniform('time', time)
         this.plane.setUniform('currentY', currentY)
+        
+        this.plane.getAttribute('posY').needsUpdate = true
     }
 }

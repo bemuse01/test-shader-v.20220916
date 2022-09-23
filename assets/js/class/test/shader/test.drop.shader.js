@@ -3,9 +3,11 @@ import ShaderMethod from '../../../method/method.shader.js'
 export default {
     vertex: `
         attribute vec2 aPosition;
+        attribute float posY;
 
         varying vec2 vUv;
         varying vec2 vPosition;
+        varying float vPosY;
 
         void main(){
             vec3 nPosition = position;
@@ -16,6 +18,7 @@ export default {
 
             vUv = uv;
             vPosition = aPosition;
+            vPosY = posY;
         }
     `,
     fragment: `
@@ -24,13 +27,13 @@ export default {
         uniform float width;
         uniform float uSize;
         uniform vec2 uPos;
-        uniform sampler2D uSeed;
         uniform float time;
         uniform sampler2D tBg;
         uniform sampler2D tFg;
 
         varying vec2 vUv;
         varying vec2 vPosition;
+        varying float vPosY;
 
         float blendOverlay(float base, float blend) {
             return base<0.5?(2.0*base*blend):(1.0-2.0*(1.0-base)*(1.0-blend));
@@ -44,14 +47,6 @@ export default {
             return (blendOverlay(base, blend) * opacity + base * (1.0 - opacity));
         }
     
-        vec2 getCurrentCoord(vec2 fragCoord, vec2 pos, vec2 size){
-            vec2 offset = fragCoord - vec2(0);
-            vec2 halfSize = size * 0.5;
-            vec2 coord = offset / halfSize;
-
-            return coord * 0.5 + 0.5;
-        }
-
         ${ShaderMethod.snoise2D()}
         ${ShaderMethod.executeNormalizing()}
 
@@ -60,25 +55,22 @@ export default {
             vec2 coord = gl_FragCoord.xy / eResolution;
             vec2 st = gl_FragCoord.xy - (eResolution * 0.5);
 
-            // vec4 seed = texture(uSeed, vUv);
-
             // get uv
             float oWidthRatio = width / oResolution.x;
             float eWidth = oWidthRatio * eResolution.x;
 
-            float nPos = snoise2D(vec2(0.0, uPos.y / eResolution.y) * vec2(1.0, 2.5));
+            float nPos = snoise2D(vec2(0.0, vPosY / eResolution.y) * vec2(1.0, 2.5));
             float posX = executeNormalizing(nPos, 0.4875, 0.5125, -1.0, 1.0);
 
             // 
             vec2 oRatio = vPosition / oResolution;
             vec2 ePos = oRatio * eResolution;
 
-            vec2 pos = vec2(eResolution.x * posX + ePos.x, uPos.y);
+            vec2 pos = vec2(eResolution.x * posX + ePos.x, vPosY);
             float dist = distance(pos, fragCoord);
 
             vec4 bg = texture(tBg, coord);
   
-            // bg.rgb *= 2.0;
             bg.a = 0.0;
 
             if(dist < uSize){
@@ -89,10 +81,6 @@ export default {
                 bg.rgb = blendOverlay(bg.rgb, fg.rgb * 1.0, 1.0);
                 bg.a = 1.0;
             }
-
-            vec4 pp = vec4(0.3, 0.3, 0.3, 0.3);
-
-            if(fragCoord.x > eResolution.x * 0.5) pp = vec4(0.3);
 
             gl_FragColor = bg;
         }
