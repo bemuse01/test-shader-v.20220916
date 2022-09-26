@@ -5,11 +5,13 @@ export default {
         attribute vec2 aPosition;
         attribute float posY;
         attribute float seed;
+        attribute float idx;
 
         varying vec2 vUv;
         varying vec2 vPosition;
         varying float vPosY;
         varying float vSeed;
+        varying float vIdx;
 
         void main(){
             vec3 nPosition = position;
@@ -22,6 +24,7 @@ export default {
             vPosition = aPosition;
             vPosY = posY;
             vSeed = seed;
+            vIdx = idx;
         }
     `,
     fragment: `
@@ -37,6 +40,7 @@ export default {
         varying vec2 vPosition;
         varying float vPosY;
         varying float vSeed;
+        varying float vIdx;
 
         float blendOverlay(float base, float blend) {
             return base<0.5?(2.0*base*blend):(1.0-2.0*(1.0-base)*(1.0-blend));
@@ -63,9 +67,9 @@ export default {
             float oWidthRatio = width / oResolution.x;
             float eWidth = oWidthRatio * eResolution.x;
 
-            // vec4 seed = texture(tSeed, vec2(0.0, vPosY / eResolution.y));
+            vec4 seed = texture(tSeed, vec2(vIdx, vPosY / eResolution.y));
 
-            float nPos = snoise2D(vec2(0.0, vPosY / eResolution.y) * vec2(1.0, 2.5 * vSeed));
+            float nPos = snoise2D(vec2(0.0, seed.x) * vec2(1.0, 2.5 * vSeed));
             float posX = executeNormalizing(nPos, 0.4875, 0.5125, -1.0, 1.0);
 
             // 

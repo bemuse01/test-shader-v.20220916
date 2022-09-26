@@ -13,8 +13,6 @@ export default class{
         this.dataTextures = dataTextures
         this.renderOrder = renderOrder
 
-        console.log(this.dataTextures)
-
         this.param = {
             ...param
         }
@@ -67,6 +65,7 @@ export default class{
         this.plane.setInstancedAttribute('posY', this.attributes.posY, 1)
         this.plane.setInstancedAttribute('seed', this.attributes.seed, 1)
         this.plane.setInstancedAttribute('opacity', this.attributes.opacity, 1)
+        this.plane.setInstancedAttribute('idx', this.attributes.idx, 1)
 
         this.plane.get().renderOrder = this.renderOrder
 
@@ -76,6 +75,7 @@ export default class{
 
     // animate
     animate(){
+        this.plane.getAttribute('aPosition').needsUpdate = true
         this.plane.getAttribute('posY').needsUpdate = true
         this.plane.getAttribute('opacity').needsUpdate = true
     }

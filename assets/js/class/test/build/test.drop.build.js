@@ -61,6 +61,7 @@ export default class{
         this.drop.setInstancedAttribute('aPosition', this.attributes.position, 2)
         this.drop.setInstancedAttribute('posY', this.attributes.posY, 1)
         this.drop.setInstancedAttribute('seed', this.attributes.seed, 1)
+        this.drop.setInstancedAttribute('idx', this.attributes.idx, 1)
 
         this.drop.get().renderOrder = this.renderOrder
 
@@ -78,6 +79,7 @@ export default class{
 
     // animate
     animate(){
+        this.drop.getAttribute('aPosition').needsUpdate = true
         this.drop.getAttribute('posY').needsUpdate = true
     }
 }

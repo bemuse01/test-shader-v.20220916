@@ -41,14 +41,15 @@ export default class{
 
     // create
     create(){
-        const {position, posY, seed, opacity} = this.createAttribute()
+        const {position, posY, seed, opacity, idx} = this.createAttribute()
         const {seedTexture} = this.createDataTexture()
 
         this.attributes = {
             position: new Float32Array(position),
             posY: new Float32Array(posY),
             seed: new Float32Array(seed),
-            opacity: new Float32Array(opacity)
+            opacity: new Float32Array(opacity),
+            idx: new Float32Array(idx)
         }
 
         this.dataTextures = {
@@ -68,6 +69,7 @@ export default class{
         const posY = []
         const seed = []
         const opacity = []
+        const idx = []
 
         for(let i = 0; i < count; i++){
             const x = Math.random() * w - w / 2
@@ -84,29 +86,48 @@ export default class{
 
             const o = 1
             opacity.push(o)
+
+
+            const index = i / (count - 1)
+            idx.push(index)
         }
 
-        return {position, posY, seed, opacity}
+        return {position, posY, seed, opacity, idx}
     }
     createDataTexture(){
+        const {count} = this.param
         const h = ~~(this.size.el.h)
         const seed = []
-
+        
         for(let i = 0; i < h; i++){
-            for(let j = 0; j < 1; j++){
-
-                const r = SIMPLEX.noise2D(j, i * 0.1)
+            for(let j = 0; j < count; j++){
+                const r = SIMPLEX.noise2D(j * 0.01, i * 0.0015)
                 const n = r * 0.5 + 0.5
 
                 seed.push(n, 0, 0, 0)
             }
         }
 
-        console.log(seed)
-
-        const seedTexture = new THREE.DataTexture(new Float32Array(seed), 1, h, THREE.RGBAFormat, THREE.FloatType)
+        const seedTexture = new THREE.DataTexture(new Float32Array(seed), count, h, THREE.RGBAFormat, THREE.FloatType)
+        seedTexture.needsUpdate = true
 
         return {seedTexture}
+    }
+    updateSeedDataTexture(col){
+        const {data, width, height} = this.dataTextures.seed.image
+
+        for(let i = 0; i < height; i++){
+            for(let j = col; j < col + 1; j++){
+                const idx = (i * width + j) * 4
+
+                const r = SIMPLEX.noise2D(j * 0.01, i * 0.0015)
+                const n = r * 0.5 + 0.5
+
+                data[idx] = n
+            }
+        }
+
+        this.dataTextures.seed.needsUpdate = true
     }
 
 
@@ -144,6 +165,7 @@ export default class{
 
     // tween
     createTween(idx){
+        const position = this.attributes.position
         const posY = this.attributes.posY
         const opacity = this.attributes.opacity
 
@@ -153,7 +175,7 @@ export default class{
         const tw = new TWEEN.Tween(start)
         .to(end, 1000)
         .onUpdate(() => this.onUpdateTween(idx, opacity, start))
-        .onComplete(() => this.onCompleteTween(idx, posY, opacity))
+        .onComplete(() => this.onCompleteTween(idx, posY, opacity, position))
         // .repeat(Infinity)
         // .delay(Math.random() * 1000)
         .start()
@@ -161,11 +183,15 @@ export default class{
     onUpdateTween(idx, opacity, {o}){
         opacity[idx] = o
     }
-    onCompleteTween(idx, posY, opacity){
+    onCompleteTween(idx, posY, opacity, position){
+        const w = this.size.obj.w
         const h = this.size.el.h
+        const x = Math.random() * w - w / 2
 
         posY[idx] = h + this.radius
         opacity[idx] = 1
+        position[idx * 2] = x
+        this.updateSeedDataTexture(idx)
 
         this.velocity[idx] = -(Math.random() * 1 + 1)
 

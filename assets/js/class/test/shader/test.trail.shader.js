@@ -6,6 +6,7 @@ export default {
         attribute float posY;
         attribute float seed;
         attribute float opacity;
+        attribute float idx;
 
         varying vec2 vUv;
         varying vec2 vPosition;
@@ -13,6 +14,7 @@ export default {
         varying float vPosY;
         varying float vSeed;
         varying float vOpacity;
+        varying float vIdx;
 
         void main(){
             vec3 nPosition = position;
@@ -27,6 +29,7 @@ export default {
             vPosY = posY;
             vSeed = seed;
             vOpacity = opacity;
+            vIdx = idx;
         }
     `,
     fragment: `
@@ -43,6 +46,7 @@ export default {
         varying float vPosY;
         varying float vSeed;
         varying float vOpacity;
+        varying float vIdx;
 
         ${ShaderMethod.snoise2D()}
         ${ShaderMethod.executeNormalizing()}
@@ -89,9 +93,9 @@ export default {
             vec2 size = vec2(eWidth, eResolution.y);
             vec2 rCoord = getCurrentCoord(fragCoord, vec2(0), size);
 
-            // vec4 seed = texture(tSeed, vec2(1.0, coord.y));
+            vec4 seed = texture(tSeed, vec2(vIdx, coord.y));
 
-            float nPos = snoise2D(vec2(0.0, coord.y) * vec2(1.0, 2.5 * vSeed));
+            float nPos = snoise2D(vec2(0.0, seed.x) * vec2(1.0, 2.5 * vSeed));
             float pos = executeNormalizing(nPos, 0.2, 0.8, -1.0, 1.0);
 
             float gap = 0.2;
