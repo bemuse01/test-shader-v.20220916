@@ -35,6 +35,7 @@ export default {
         uniform float width;
         uniform sampler2D tBg;
         uniform sampler2D tFg;
+        uniform sampler2D tSeed;
 
         varying vec2 vUv;
         varying vec2 vPosition;
@@ -87,6 +88,8 @@ export default {
 
             vec2 size = vec2(eWidth, eResolution.y);
             vec2 rCoord = getCurrentCoord(fragCoord, vec2(0), size);
+
+            // vec4 seed = texture(tSeed, vec2(1.0, coord.y));
 
             float nPos = snoise2D(vec2(0.0, coord.y) * vec2(1.0, 2.5 * vSeed));
             float pos = executeNormalizing(nPos, 0.2, 0.8, -1.0, 1.0);

@@ -4,13 +4,16 @@ import Shader from '../shader/test.trail.shader.js'
 import ParentMethod from '../method/test.method.js'
 
 export default class{
-    constructor({group, size, images, textures, attributes, renderOrder, param}){
+    constructor({group, size, images, textures, attributes, dataTextures, renderOrder, param}){
         this.group = group
         this.size = size
         this.images = images
         this.textures = textures
         this.attributes = attributes
+        this.dataTextures = dataTextures
         this.renderOrder = renderOrder
+
+        console.log(this.dataTextures)
 
         this.param = {
             ...param
@@ -55,6 +58,7 @@ export default class{
                     width: {value: this.param.width},
                     tBg: {value: bg},
                     tFg: {value: fg},
+                    tSeed: {value: this.dataTextures.seed}
                 }
             }
         })

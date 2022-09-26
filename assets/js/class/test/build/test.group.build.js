@@ -42,6 +42,7 @@ export default class{
     // create
     create(){
         const {position, posY, seed, opacity} = this.createAttribute()
+        const {seedTexture} = this.createDataTexture()
 
         this.attributes = {
             position: new Float32Array(position),
@@ -49,9 +50,13 @@ export default class{
             seed: new Float32Array(seed),
             opacity: new Float32Array(opacity)
         }
+
+        this.dataTextures = {
+            seed: seedTexture
+        }
         
-        this.drop = new Drop({...this, renderOrder: 2, attributes: this.attributes, param: this.param})
-        this.trail = new Trail({...this, renderOrder: 1, attributes: this.attributes, param: this.param})
+        this.drop = new Drop({...this, renderOrder: 2, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
+        this.trail = new Trail({...this, renderOrder: 1, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
     }
     createAttribute(){
         const {count} = this.param
@@ -82,6 +87,26 @@ export default class{
         }
 
         return {position, posY, seed, opacity}
+    }
+    createDataTexture(){
+        const h = ~~(this.size.el.h)
+        const seed = []
+
+        for(let i = 0; i < h; i++){
+            for(let j = 0; j < 1; j++){
+
+                const r = SIMPLEX.noise2D(j, i * 0.1)
+                const n = r * 0.5 + 0.5
+
+                seed.push(n, 0, 0, 0)
+            }
+        }
+
+        console.log(seed)
+
+        const seedTexture = new THREE.DataTexture(new Float32Array(seed), 1, h, THREE.RGBAFormat, THREE.FloatType)
+
+        return {seedTexture}
     }
 
 

@@ -4,12 +4,13 @@ import Shader from '../shader/test.drop.shader.js'
 import ParentMethod from '../method/test.method.js'
 
 export default class{
-    constructor({group, size, images, textures, attributes, renderOrder, param}){
+    constructor({group, size, images, textures, attributes, dataTextures, renderOrder, param}){
         this.group = group
         this.size = size
         this.images = images
         this.textures = textures
         this.attributes = attributes
+        this.dataTextures = dataTextures
         this.renderOrder = renderOrder
 
         this.param = {
@@ -52,6 +53,7 @@ export default class{
                     oResolution: {value: new THREE.Vector2(this.size.obj.w, this.size.obj.h)},
                     width: {value: width},
                     radius: {value: radius},
+                    tSeed: {value: this.dataTextures.seed}
                 }
             }
         })
