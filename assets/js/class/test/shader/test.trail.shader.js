@@ -95,7 +95,8 @@ export default {
 
             vec4 seed = texture(tSeed, vec2(vIdx, coord.y));
 
-            float nPos = snoise2D(vec2(0.0, seed.x) * vec2(1.0, 2.5 * vSeed));
+            // float nPos = snoise2D(vec2(0.0, seed.x) * vec2(1.0, 2.5 * vSeed));
+            float nPos = seed.x;
             float pos = executeNormalizing(nPos, 0.2, 0.8, -1.0, 1.0);
 
             float gap = 0.2;

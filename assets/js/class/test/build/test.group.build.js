@@ -13,11 +13,11 @@ export default class{
         this.param = {
             width: 10,
             xRange: 0.3,
-            count: 10,
+            count: 15,
             radius: 16,
             momentum: {
-                min: 0.2,
-                max: 0.3
+                min: 0.3,
+                max: 0.4
             }
         }
 
@@ -98,11 +98,13 @@ export default class{
         const {count} = this.param
         const h = ~~(this.size.el.h)
         const seed = []
+        const rand = Math.random()
         
         for(let i = 0; i < h; i++){
             for(let j = 0; j < count; j++){
-                const r = SIMPLEX.noise2D(j * 0.01, i * 0.0015)
-                const n = r * 0.5 + 0.5
+
+                const r = SIMPLEX.noise3D(rand, j * 0.01, i * 0.003 * rand)
+                const n = r
 
                 seed.push(n, 0, 0, 0)
             }
@@ -115,13 +117,14 @@ export default class{
     }
     updateSeedDataTexture(col){
         const {data, width, height} = this.dataTextures.seed.image
+        const rand = Math.random()
 
         for(let i = 0; i < height; i++){
             for(let j = col; j < col + 1; j++){
                 const idx = (i * width + j) * 4
 
-                const r = SIMPLEX.noise2D(j * 0.01, i * 0.0015)
-                const n = r * 0.5 + 0.5
+                const r = SIMPLEX.noise3D(rand, j * 0.01, i * 0.003 * rand)
+                const n = r
 
                 data[idx] = n
             }
