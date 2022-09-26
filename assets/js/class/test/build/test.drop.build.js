@@ -62,6 +62,7 @@ export default class{
         this.drop.setInstancedAttribute('posY', this.attributes.posY, 1)
         this.drop.setInstancedAttribute('seed', this.attributes.seed, 1)
         this.drop.setInstancedAttribute('idx', this.attributes.idx, 1)
+        this.drop.setInstancedAttribute('scale', this.attributes.scale, 1)
 
         this.drop.get().renderOrder = this.renderOrder
 

@@ -66,6 +66,7 @@ export default class{
         this.plane.setInstancedAttribute('seed', this.attributes.seed, 1)
         this.plane.setInstancedAttribute('opacity', this.attributes.opacity, 1)
         this.plane.setInstancedAttribute('idx', this.attributes.idx, 1)
+        this.plane.setInstancedAttribute('scale', this.attributes.scale, 1)
 
         this.plane.get().renderOrder = this.renderOrder
 

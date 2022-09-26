@@ -7,6 +7,7 @@ export default {
         attribute float seed;
         attribute float opacity;
         attribute float idx;
+        attribute float scale;
 
         varying vec2 vUv;
         varying vec2 vPosition;
@@ -15,6 +16,7 @@ export default {
         varying float vSeed;
         varying float vOpacity;
         varying float vIdx;
+        varying float vScale;
 
         void main(){
             vec3 nPosition = position;
@@ -30,6 +32,7 @@ export default {
             vSeed = seed;
             vOpacity = opacity;
             vIdx = idx;
+            vScale = scale;
         }
     `,
     fragment: `
@@ -47,6 +50,7 @@ export default {
         varying float vSeed;
         varying float vOpacity;
         varying float vIdx;
+        varying float vScale;
 
         ${ShaderMethod.snoise2D()}
         ${ShaderMethod.executeNormalizing()}
@@ -99,7 +103,7 @@ export default {
             float nPos = seed.x;
             float pos = executeNormalizing(nPos, 0.2, 0.8, -1.0, 1.0);
 
-            float gap = 0.2;
+            float gap = 0.2 * vScale;
 
             float currentY = vPosY / eResolution.y;
 

@@ -6,12 +6,14 @@ export default {
         attribute float posY;
         attribute float seed;
         attribute float idx;
+        attribute float scale;
 
         varying vec2 vUv;
         varying vec2 vPosition;
         varying float vPosY;
         varying float vSeed;
         varying float vIdx;
+        varying float vScale;
 
         void main(){
             vec3 nPosition = position;
@@ -25,6 +27,7 @@ export default {
             vPosY = posY;
             vSeed = seed;
             vIdx = idx;
+            vScale = scale;
         }
     `,
     fragment: `
@@ -41,6 +44,7 @@ export default {
         varying float vPosY;
         varying float vSeed;
         varying float vIdx;
+        varying float vScale;
 
         float blendOverlay(float base, float blend) {
             return base<0.5?(2.0*base*blend):(1.0-2.0*(1.0-base)*(1.0-blend));
@@ -87,8 +91,8 @@ export default {
   
             bg.a = 0.0;
 
-            float radX = radius * 0.8;
-            float radY = radius * 1.25;
+            float radX = radius * vScale * 0.8;
+            float radY = radius * vScale * 1.25;
 
             float rx = fragCoord.x - pos.x;
             float ry = fragCoord.y - pos.y;

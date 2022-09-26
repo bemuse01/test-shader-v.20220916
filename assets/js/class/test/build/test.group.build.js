@@ -13,7 +13,7 @@ export default class{
         this.param = {
             width: 10,
             xRange: 0.3,
-            count: 15,
+            count: 20,
             radius: 16,
             momentum: {
                 min: 0.3,
@@ -41,7 +41,7 @@ export default class{
 
     // create
     create(){
-        const {position, posY, seed, opacity, idx} = this.createAttribute()
+        const {position, posY, seed, opacity, idx, scale} = this.createAttribute()
         const {seedTexture} = this.createDataTexture()
 
         this.attributes = {
@@ -49,7 +49,8 @@ export default class{
             posY: new Float32Array(posY),
             seed: new Float32Array(seed),
             opacity: new Float32Array(opacity),
-            idx: new Float32Array(idx)
+            idx: new Float32Array(idx),
+            scale: new Float32Array(scale)
         }
 
         this.dataTextures = {
@@ -70,6 +71,7 @@ export default class{
         const seed = []
         const opacity = []
         const idx = []
+        const scale = []
 
         for(let i = 0; i < count; i++){
             const x = Math.random() * w - w / 2
@@ -90,9 +92,13 @@ export default class{
 
             const index = i / (count - 1)
             idx.push(index)
+
+
+            const scl = Math.random() * 0.25 + 1
+            scale.push(scl)
         }
 
-        return {position, posY, seed, opacity, idx}
+        return {position, posY, seed, opacity, idx, scale}
     }
     createDataTexture(){
         const {count} = this.param
