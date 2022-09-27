@@ -157,7 +157,7 @@ export default class{
         for(let i = 0; i < count; i++){
             const momen = THREE.MathUtils.randFloat(momentum.min, momentum.max)
 
-            delay[i] += 0.01
+            delay[i] += 0.005
 
             if(delay[i] > timer[i]) velocity[i] -= momen
 
