@@ -4,21 +4,20 @@ import Shader from '../shader/test.droplets.shader.js'
 import PublicMethod from '../../../method/method.js'
 
 export default class{
-    constructor({group, size, comp, textures, gpu, images, renderOrder}){
+    constructor({group, size, position, param, textures, gpu, images, renderOrder}){
         this.group = group
         this.size = size
         this.textures = textures
         this.gpu = gpu
+        this.position = position
         // this.drops = comp['Drop']
         this.images = images
         this.renderOrder = renderOrder
+        this.radius = (param.radius / this.size.el.w) * this.size.obj.w
+        this.count = param.count
 
         // this.dropsParam = this.drops.param
 
-        // const w = 80
-        // const h = 80
-        // const w = ~~(this.size.obj.w / 2) > 100 ? 100 : ~~(this.size.obj.w / 2)
-        // const h = ~~(this.size.obj.h / 2) > 100 ? 100 : ~~(this.size.obj.h / 2)
         const w = ~~(this.size.el.w / 11) > 100 ? 100 : ~~(this.size.el.w / 11)
         const h = ~~(this.size.el.h / 11) > 100 ? 100 : ~~(this.size.el.h / 11)
 
@@ -29,7 +28,7 @@ export default class{
             radius: 0.5,
             seg: 64,
             scaleY: 0.85,
-            bgViewScale: 1
+            bgViewScale: 3
         }
 
         this.scale = {min: 0.5, max: 1.5}
@@ -148,7 +147,7 @@ export default class{
         this.createGpuKernels()
     }
     createGpuKernels(){
-        this.detectCollision = this.gpu.createKernel(function(param1, param2, pos1, pos2){
+        this.detectCollision = this.gpu.createKernel(function(param1, pos1, pos2){
             const i = this.thread.x
             const idx = i * 4
             const rad1 = this.constants.radius1
@@ -170,15 +169,14 @@ export default class{
             if(alpha !== 0){
                 // do not use continue...
                 for(let i2 = 0; i2 < count2; i2++){
-                    const idx2 = i2 * 4
+                    const idx2 = i2 * 2
                     const x2 = pos2[idx2 + 0]
                     const y2 = pos2[idx2 + 1]
-                    const alpha2 = param2[idx2 + 1]
 
                     const dist = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
                     const rad = (rad1 + rad2) * 0.7
 
-                    if(dist < rad && alpha2 !== 0){
+                    if(dist < rad){
                         alpha = 0
                     }
                 }
@@ -203,19 +201,19 @@ export default class{
 
     // animate
     animate(){
-        // this.updateDroplet()
+        this.updateDroplet()
     }
     updateDroplet(){
         const {count, radius} = this.param
-        const radius2 = this.dropsParam.radius
-        const count2 = this.dropsParam.count
+        const radius2 = this.radius
+        const count2 = this.count
 
         const position1Arr = this.droplet.getUniform('tPosition').image.data
-        const position2Arr = this.drops.drop.getAttribute('aPosition').array
+        const position2Arr = this.position
 
         const param1 = this.droplet.getUniform('tParam')
         const param1Arr = this.droplet.getUniform('tParam').image.data
-        const param2Arr = this.drops.drop.getAttribute('aParam').array
+        // const param2Arr = this.drops.drop.getAttribute('aParam').array
         
         this.detectCollision.setOutput([count])
         this.detectCollision.setConstants({
@@ -225,7 +223,7 @@ export default class{
         })
 
         const temp = []
-        const res = this.detectCollision(param1Arr, param2Arr, position1Arr, position2Arr)
+        const res = this.detectCollision(param1Arr, position1Arr, position2Arr)
 
         for(let i = 0; i < res.length; i++) temp.push(...res[i])
 

@@ -21,15 +21,18 @@ export default class{
                 min: 0.3,
                 max: 0.4
             },
-            wave: 0.002
+            wave: 0.003
         }
 
         this.velocity = Array.from({length: this.param.count}, _ => 0)
         this.timer = Array.from({length: this.param.count}, _ => Math.random())
         this.delay = Array.from({length: this.param.count}, _ => 0)
         this.play = Array.from({length: this.param.count}, _ => true)
+        this.position = Array.from({length: this.param.count * 2}, _ => -1000)
 
         this.radius = this.param.radius * 2
+
+        this.noise = new SimplexNoise()
 
         this.init()
     }
@@ -62,7 +65,7 @@ export default class{
         
         this.drop = new Drop({...this, renderOrder: 3, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
         this.trail = new Trail({...this, renderOrder: 1, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
-        // this.droplets = new Droplets({...this, renderOrder: 2})
+        this.droplets = new Droplets({...this, renderOrder: 2})
     }
     createAttribute(){
         const {count} = this.param
@@ -146,8 +149,10 @@ export default class{
     // animate
     animate(){
         this.moveDrop()
+        this.getDropPosition()
         this.trail.animate()
         this.drop.animate()
+        this.droplets.animate()
     }
     moveDrop(){
         const {count, momentum} = this.param
@@ -171,6 +176,41 @@ export default class{
                 play[i] = false
                 this.createTween(i)
             }
+        }
+    }
+    getDropPosition(){
+        const {count} = this.param
+        const position = this.attributes.position
+        const posY = this.attributes.posY
+        const {data, width, height} = this.dataTextures.seed.image
+
+        const ew = this.size.el.w
+        const ow = this.size.obj.w
+        const eh = this.size.el.h
+        const oh = this.size.obj.h
+
+        const len = height
+
+        for(let i = 0; i < count; i++){
+            const idx = i * 2
+
+            const y = posY[i]
+            const y2 = (posY[i] - (eh * 0.5)) / eh * oh
+
+            if(y > eh || y < 0) continue
+
+            const index = ~~((y / eh) * len)
+            const idx2 = (index * width + i) * 4 
+
+            const seed = data[idx2]
+            const nSeed = PublicMethod.normalize(seed, 0.4875, 0.5125, -1.0, 1.0)
+            const xSeed = nSeed * ew
+
+            const cx = (position[idx] / ow) * ew
+            const x = ((xSeed + cx) - (ew * 0.5)) / ew * ow
+
+            this.position[idx + 0] = x
+            this.position[idx + 1] = y2
         }
     }
 
