@@ -62,7 +62,7 @@ export default class{
         
         this.drop = new Drop({...this, renderOrder: 3, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
         this.trail = new Trail({...this, renderOrder: 1, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
-        this.droplets = new Droplets({...this, renderOrder: 2})
+        // this.droplets = new Droplets({...this, renderOrder: 2})
     }
     createAttribute(){
         const {count} = this.param
