@@ -174,7 +174,7 @@ export default class{
                     const y2 = pos2[idx2 + 1]
 
                     const dist = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
-                    const rad = (rad1 + rad2) * 0.7
+                    const rad = (rad1 + rad2) * 0.9
 
                     if(dist < rad){
                         alpha = 0
