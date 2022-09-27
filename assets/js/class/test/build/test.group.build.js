@@ -1,14 +1,16 @@
 import Drop from './test.drop.build.js'
 import Trail from './test.trail.build.js'
+import Droplets from './test.droplets.build.js'
 import * as THREE from '../../../lib/three.module.js'
 import PublicMethod from '../../../method/method.js'
 
 export default class{
-    constructor({group, size, images, textures}){
+    constructor({group, size, images, textures, gpu}){
         this.group = group
         this.size = size
         this.images = images
         this.textures = textures
+        this.gpu = gpu
 
         this.param = {
             width: 10,
@@ -58,8 +60,9 @@ export default class{
             seed: seedTexture
         }
         
-        this.drop = new Drop({...this, renderOrder: 2, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
+        this.drop = new Drop({...this, renderOrder: 3, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
         this.trail = new Trail({...this, renderOrder: 1, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
+        this.droplets = new Droplets({...this, renderOrder: 2})
     }
     createAttribute(){
         const {count} = this.param
@@ -83,7 +86,7 @@ export default class{
             posY.push(y)
 
             
-            const s = Math.random() * 1
+            const s = Math.random() * 5
             seed.push(s)
 
 
