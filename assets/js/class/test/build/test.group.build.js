@@ -21,6 +21,10 @@ export default class{
                 min: 0.3,
                 max: 0.4
             },
+            size: {
+                min: 0.8,
+                max: 1.2
+            },
             wave: 0.003
         }
 
@@ -68,7 +72,7 @@ export default class{
         this.droplets = new Droplets({...this, renderOrder: 2})
     }
     createAttribute(){
-        const {count} = this.param
+        const {count, size} = this.param
 
         const w = this.size.obj.w
         const h = this.size.el.h
@@ -101,7 +105,7 @@ export default class{
             idx.push(index)
 
 
-            const scl = Math.random() * 0.25 + 1
+            const scl = THREE.MathUtils.randFloat(size.min, size.max)
             scale.push(scl)
         }
 
@@ -195,7 +199,7 @@ export default class{
             const idx = i * 2
 
             const y = posY[i]
-            const y2 = (posY[i] - (eh * 0.5)) / eh * oh
+            const y2 = (y - (eh * 0.5)) / eh * oh
 
             if(y > eh || y < 0) continue
 

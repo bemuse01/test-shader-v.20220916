@@ -107,6 +107,8 @@ export default {
 
             float currentY = vPosY / eResolution.y;
 
+            float opacity3 = distance(rCoord, vec2(1.0, 1.0));
+
             if(rCoord.x > pos - gap && rCoord.x < pos + gap){
                 float uvX = executeNormalizing(rCoord.x, 0.0, 1.0, pos - gap, pos + gap);
 
@@ -121,6 +123,8 @@ export default {
 
                 bg.a = (1.1 - opacity) * opacity2 * vOpacity;
             }
+
+            bg.a *= opacity3;
 
             gl_FragColor = bg;
         }
