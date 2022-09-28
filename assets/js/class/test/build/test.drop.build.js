@@ -58,8 +58,8 @@ export default class{
             }
         })
 
-        this.drop.setInstancedAttribute('aPosition', this.attributes.position, 2)
-        this.drop.setInstancedAttribute('posY', this.attributes.posY, 1)
+        this.drop.setInstancedAttribute('objPos', this.attributes.objPos, 2)
+        this.drop.setInstancedAttribute('elPos', this.attributes.elPos, 2)
         this.drop.setInstancedAttribute('seed', this.attributes.seed, 1)
         this.drop.setInstancedAttribute('idx', this.attributes.idx, 1)
         this.drop.setInstancedAttribute('scale', this.attributes.scale, 1)
@@ -80,7 +80,7 @@ export default class{
 
     // animate
     animate(){
-        this.drop.getAttribute('aPosition').needsUpdate = true
-        this.drop.getAttribute('posY').needsUpdate = true
+        this.drop.getAttribute('objPos').needsUpdate = true
+        this.drop.getAttribute('elPos').needsUpdate = true
     }
 }

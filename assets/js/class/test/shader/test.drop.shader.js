@@ -2,15 +2,15 @@ import ShaderMethod from '../../../method/method.shader.js'
 
 export default {
     vertex: `
-        attribute vec2 aPosition;
-        attribute float posY;
+        attribute vec2 objPos;
+        attribute vec2 elPos;
         attribute float seed;
         attribute float idx;
         attribute float scale;
 
         varying vec2 vUv;
-        varying vec2 vPosition;
-        varying float vPosY;
+        varying vec2 vObjPos;
+        varying vec2 vElPos;
         varying float vSeed;
         varying float vIdx;
         varying float vScale;
@@ -18,13 +18,13 @@ export default {
         void main(){
             vec3 nPosition = position;
 
-            nPosition.xy += aPosition;
+            nPosition.xy += objPos;
 
             gl_Position = projectionMatrix * modelViewMatrix * vec4(nPosition, 1.0);
 
             vUv = uv;
-            vPosition = aPosition;
-            vPosY = posY;
+            vObjPos = objPos;
+            vElPos = elPos;
             vSeed = seed;
             vIdx = idx;
             vScale = scale;
@@ -40,8 +40,8 @@ export default {
         uniform sampler2D tSeed;
 
         varying vec2 vUv;
-        varying vec2 vPosition;
-        varying float vPosY;
+        varying vec2 vObjPos;
+        varying vec2 vElPos;
         varying float vSeed;
         varying float vIdx;
         varying float vScale;
@@ -71,17 +71,17 @@ export default {
             float oWidthRatio = width / oResolution.x;
             float eWidth = oWidthRatio * eResolution.x;
 
-            vec4 seed = texture(tSeed, vec2(vIdx, vPosY / eResolution.y));
+            vec4 seed = texture(tSeed, vec2(vIdx, vElPos.y / eResolution.y));
 
             // float nPos = snoise2D(vec2(0.0, seed.x) * vec2(1.0, 2.5 * vSeed));
             float nPos = seed.x;
             float posX = executeNormalizing(nPos, 0.4875, 0.5125, -1.0, 1.0);
 
             // 
-            vec2 oRatio = vPosition / oResolution;
+            vec2 oRatio = vObjPos / oResolution;
             vec2 ePos = oRatio * eResolution;
 
-            vec2 pos = vec2(eResolution.x * posX + ePos.x, vPosY);
+            vec2 pos = vec2(eResolution.x * posX + ePos.x, vElPos.y);
             float dist = distance(pos, fragCoord);
             // float distX = distance(pos.x, fragCoord.x);
             // float distY = distance(pos.y, fragCoord.y);

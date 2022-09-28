@@ -61,8 +61,8 @@ export default class{
             }
         })
 
-        this.plane.setInstancedAttribute('aPosition', this.attributes.position, 2)
-        this.plane.setInstancedAttribute('posY', this.attributes.posY, 1)
+        this.plane.setInstancedAttribute('objPos', this.attributes.objPos, 2)
+        this.plane.setInstancedAttribute('elPos', this.attributes.elPos, 2)
         this.plane.setInstancedAttribute('seed', this.attributes.seed, 1)
         this.plane.setInstancedAttribute('opacity', this.attributes.opacity, 1)
         this.plane.setInstancedAttribute('idx', this.attributes.idx, 1)
@@ -76,8 +76,8 @@ export default class{
 
     // animate
     animate(){
-        this.plane.getAttribute('aPosition').needsUpdate = true
-        this.plane.getAttribute('posY').needsUpdate = true
+        this.plane.getAttribute('objPos').needsUpdate = true
+        this.plane.getAttribute('elPos').needsUpdate = true
         this.plane.getAttribute('opacity').needsUpdate = true
     }
 }

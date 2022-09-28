@@ -51,12 +51,12 @@ export default class{
 
     // create
     create(){
-        const {position, posY, seed, opacity, idx, scale} = this.createAttribute()
+        const {objPos, elPos, seed, opacity, idx, scale} = this.createAttribute()
         const {seedTexture} = this.createDataTexture()
 
         this.attributes = {
-            position: new Float32Array(position),
-            posY: new Float32Array(posY),
+            objPos: new Float32Array(objPos),
+            elPos: new Float32Array(elPos),
             seed: new Float32Array(seed),
             opacity: new Float32Array(opacity),
             idx: new Float32Array(idx),
@@ -77,8 +77,8 @@ export default class{
         const w = this.size.obj.w
         const h = this.size.el.h
 
-        const position = []
-        const posY = []
+        const objPos = []
+        const elPos = []
         const seed = []
         const opacity = []
         const idx = []
@@ -86,11 +86,11 @@ export default class{
 
         for(let i = 0; i < count; i++){
             const x = Math.random() * w - w / 2
-            position.push(x, 0)
+            objPos.push(x, 0)
 
 
             const y = h + this.radius
-            posY.push(y)
+            elPos.push(0, y)
 
             
             const s = Math.random() * 5
@@ -109,7 +109,7 @@ export default class{
             scale.push(scl)
         }
 
-        return {position, posY, seed, opacity, idx, scale}
+        return {objPos, elPos, seed, opacity, idx, scale}
     }
     createDataTexture(){
         const {count, wave} = this.param
@@ -160,22 +160,23 @@ export default class{
     }
     moveDrop(){
         const {count, momentum} = this.param
-        const posY = this.attributes.posY
+        const elPos = this.attributes.elPos
         const velocity = this.velocity
         const timer = this.timer
         const delay = this.delay
         const play = this.play
 
         for(let i = 0; i < count; i++){
+            const idx = i * 2
             const momen = THREE.MathUtils.randFloat(momentum.min, momentum.max)
 
             delay[i] += 0.005
 
             if(delay[i] > timer[i]) velocity[i] -= momen
 
-            posY[i] += velocity[i]
+            elPos[idx + 1] += velocity[i]
 
-            if(posY[i] < -this.radius){
+            if(elPos[idx + 1] < -this.radius){
                 if(play[i] === false) continue
                 play[i] = false
                 this.createTween(i)
@@ -184,8 +185,8 @@ export default class{
     }
     getDropPosition(){
         const {count} = this.param
-        const position = this.attributes.position
-        const posY = this.attributes.posY
+        const objPos = this.attributes.objPos
+        const elPos = this.attributes.elPos
         const {data, width, height} = this.dataTextures.seed.image
 
         const ew = this.size.el.w
@@ -198,7 +199,7 @@ export default class{
         for(let i = 0; i < count; i++){
             const idx = i * 2
 
-            const y = posY[i]
+            const y = elPos[idx + 1]
             const y2 = (y - (eh * 0.5)) / eh * oh
 
             if(y > eh || y < 0) continue
@@ -210,7 +211,7 @@ export default class{
             const nSeed = PublicMethod.normalize(seed, 0.4875, 0.5125, -1.0, 1.0)
             const xSeed = nSeed * ew
 
-            const cx = (position[idx] / ow) * ew
+            const cx = (objPos[idx] / ow) * ew
             const x = ((xSeed + cx) - (ew * 0.5)) / ew * ow
 
             this.position[idx + 0] = x
@@ -221,8 +222,8 @@ export default class{
 
     // tween
     createTween(idx){
-        const position = this.attributes.position
-        const posY = this.attributes.posY
+        const objPos = this.attributes.objPos
+        const elPos = this.attributes.elPos
         const opacity = this.attributes.opacity
 
         const start = {o: 1}
@@ -231,7 +232,7 @@ export default class{
         const tw = new TWEEN.Tween(start)
         .to(end, 1000)
         .onUpdate(() => this.onUpdateTween(idx, opacity, start))
-        .onComplete(() => this.onCompleteTween(idx, posY, opacity, position))
+        .onComplete(() => this.onCompleteTween(idx, elPos, opacity, objPos))
         // .repeat(Infinity)
         // .delay(Math.random() * 1000)
         .start()
@@ -239,14 +240,14 @@ export default class{
     onUpdateTween(idx, opacity, {o}){
         opacity[idx] = o
     }
-    onCompleteTween(idx, posY, opacity, position){
+    onCompleteTween(idx, opacity, objPos, elPos){
         const w = this.size.obj.w
         const h = this.size.el.h
         const x = Math.random() * w - w / 2
 
-        posY[idx] = h + this.radius
+        elPos[idx * 2 + 1] = h + this.radius
         opacity[idx] = 1
-        position[idx * 2] = x
+        objPos[idx * 2] = x
         this.updateSeedDataTexture(idx)
 
         this.velocity[idx] = -(Math.random() * 1 + 1)

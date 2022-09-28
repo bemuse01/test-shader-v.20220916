@@ -2,17 +2,17 @@ import ShaderMethod from '../../../method/method.shader.js'
 
 export default {
     vertex: `
-        attribute vec2 aPosition;
-        attribute float posY;
+        attribute vec2 objPos;
+        attribute vec2 elPos;
         attribute float seed;
         attribute float opacity;
         attribute float idx;
         attribute float scale;
 
         varying vec2 vUv;
-        varying vec2 vPosition;
+        varying vec2 vObjPos;
         varying vec2 oPosition;
-        varying float vPosY;
+        varying vec2 vElPos;
         varying float vSeed;
         varying float vOpacity;
         varying float vIdx;
@@ -21,14 +21,14 @@ export default {
         void main(){
             vec3 nPosition = position;
 
-            nPosition.xy += aPosition;
+            nPosition.xy += objPos;
 
             gl_Position = projectionMatrix * modelViewMatrix * vec4(nPosition, 1.0);
 
             vUv = uv;
-            vPosition = aPosition.xy;
+            vObjPos = objPos;
             oPosition = position.xy;
-            vPosY = posY;
+            vElPos = elPos;
             vSeed = seed;
             vOpacity = opacity;
             vIdx = idx;
@@ -44,9 +44,9 @@ export default {
         uniform sampler2D tSeed;
 
         varying vec2 vUv;
-        varying vec2 vPosition;
+        varying vec2 vObjPos;
         varying vec2 oPosition;
-        varying float vPosY;
+        varying vec2 vElPos;
         varying float vSeed;
         varying float vOpacity;
         varying float vIdx;
@@ -68,7 +68,7 @@ export default {
         }
 
         vec2 getCurrentCoord(vec2 fragCoord, vec2 pos, vec2 size){
-            vec2 oRatio = (vPosition + oResolution * 0.5) / oResolution;
+            vec2 oRatio = (vObjPos + oResolution * 0.5) / oResolution;
             vec2 ePos = oRatio * eResolution;
 
             vec2 offset = ePos;
@@ -84,7 +84,7 @@ export default {
             vec2 coord = gl_FragCoord.xy / eResolution;
             vec2 st = gl_FragCoord.xy - (eResolution * 0.5);
 
-            vec2 coord2 = (vPosition + oResolution * 0.5) / oResolution;
+            vec2 coord2 = (vObjPos + oResolution * 0.5) / oResolution;
             vec2 ratio = (oPosition / oResolution);
             vec4 bg = texture(tBg, coord2 + ratio);
 
@@ -105,7 +105,7 @@ export default {
 
             float gap = 0.2 * vScale;
 
-            float currentY = vPosY / eResolution.y;
+            float currentY = vElPos.y / eResolution.y;
 
             float opacity3 = distance(rCoord, vec2(1.0, 1.0));
 
