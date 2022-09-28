@@ -29,7 +29,7 @@ export default class{
         }
 
         this.velocity = Array.from({length: this.param.count}, _ => 0)
-        this.timer = Array.from({length: this.param.count}, _ => Math.random())
+        this.timer = Array.from({length: this.param.count}, _ => Math.random() * 1.2)
         this.delay = Array.from({length: this.param.count}, _ => 0)
         this.play = Array.from({length: this.param.count}, _ => true)
         this.position = Array.from({length: this.param.count * 2}, _ => -1000)
@@ -170,7 +170,7 @@ export default class{
             const idx = i * 2
             const momen = THREE.MathUtils.randFloat(momentum.min, momentum.max)
 
-            delay[i] += 0.005
+            delay[i] += 0.01
 
             if(delay[i] > timer[i]) velocity[i] -= momen
 
