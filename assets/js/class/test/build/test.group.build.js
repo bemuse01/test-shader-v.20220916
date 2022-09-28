@@ -25,7 +25,8 @@ export default class{
                 min: 0.8,
                 max: 1.2
             },
-            wave: 0.002
+            wave: 0.003,
+            offset: 0
         }
 
         this.init()
@@ -114,7 +115,7 @@ export default class{
         return {objPos, elPos, seed, opacity, idx, scale}
     }
     createDataTexture(){
-        const {count, wave} = this.param
+        const {count, wave, offset} = this.param
         const h = ~~(this.size.el.h)
         const seed = []
         const rand = Math.random()
@@ -122,7 +123,7 @@ export default class{
         for(let i = 0; i < h; i++){
             for(let j = 0; j < count; j++){
 
-                const r = SIMPLEX.noise3D(rand, j * 0.01, i * wave * rand)
+                const r = SIMPLEX.noise3D(rand, j * 0.01, offset + i * wave * rand)
                 const n = r
 
                 seed.push(n, 0, 0, 0)
@@ -135,14 +136,14 @@ export default class{
         return {seedTexture}
     }
     updateSeedDataTexture(col){
-        const {wave} = this.param
+        const {wave, offset} = this.param
         const {data, width, height} = this.dataTextures.seed.image
         const rand = Math.random()
 
         for(let i = 0; i < height; i++){
             const idx = (i * width + col) * 4
 
-            const r = SIMPLEX.noise3D(rand, col * 0.01, i * wave * rand)
+            const r = SIMPLEX.noise3D(rand, col * 0.01, offset + i * wave * rand)
             const n = r
 
             data[idx] = n
