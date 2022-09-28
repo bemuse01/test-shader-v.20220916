@@ -69,7 +69,7 @@ export default class{
         
         this.drop = new Drop({...this, renderOrder: 3, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
         this.trail = new Trail({...this, renderOrder: 1, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
-        this.droplets = new Droplets({...this, renderOrder: 2})
+        this.droplets = new Droplets({...this, attributes: this.attributes, renderOrder: 2})
     }
     createAttribute(){
         const {count, size} = this.param
@@ -190,8 +190,10 @@ export default class{
         const {data, width, height} = this.dataTextures.seed.image
 
         const ew = this.size.el.w
+        const hew = ew / 2
         const ow = this.size.obj.w
         const eh = this.size.el.h
+        const heh = eh / 2
         const oh = this.size.obj.h
 
         const len = height
@@ -200,7 +202,7 @@ export default class{
             const idx = i * 2
 
             const y = elPos[idx + 1]
-            const y2 = (y - (eh * 0.5)) / eh * oh
+            const y2 = (y - heh) / eh * oh
 
             if(y > eh || y < 0) continue
 
@@ -211,8 +213,8 @@ export default class{
             const nSeed = PublicMethod.normalize(seed, 0.4875, 0.5125, -1.0, 1.0)
             const xSeed = nSeed * ew
 
-            const cx = (objPos[idx] / ow) * ew
-            const x = ((xSeed + cx) - (ew * 0.5)) / ew * ow
+            const cx = (objPos[idx] / ow) * ew + xSeed
+            const x = (cx - hew) / ew * ow
 
             this.position[idx + 0] = x
             this.position[idx + 1] = y2

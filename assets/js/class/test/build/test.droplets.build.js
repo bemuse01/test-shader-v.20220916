@@ -4,7 +4,7 @@ import Shader from '../shader/test.droplets.shader.js'
 import PublicMethod from '../../../method/method.js'
 
 export default class{
-    constructor({group, size, position, param, textures, gpu, images, renderOrder}){
+    constructor({group, size, position, param, textures, images, attributes, gpu, renderOrder}){
         this.group = group
         this.size = size
         this.textures = textures
@@ -15,6 +15,7 @@ export default class{
         this.renderOrder = renderOrder
         this.radius = (param.radius / this.size.el.w) * this.size.obj.w
         this.count = param.count
+        this.attributes = attributes
 
         // this.dropsParam = this.drops.param
 
@@ -147,7 +148,7 @@ export default class{
         this.createGpuKernels()
     }
     createGpuKernels(){
-        this.detectCollision = this.gpu.createKernel(function(param1, pos1, pos2){
+        this.detectCollision = this.gpu.createKernel(function(param1, pos1, pos2, scale){
             const i = this.thread.x
             const idx = i * 4
             const rad1 = this.constants.radius1
@@ -172,9 +173,10 @@ export default class{
                     const idx2 = i2 * 2
                     const x2 = pos2[idx2 + 0]
                     const y2 = pos2[idx2 + 1]
+                    const s = scale[i2]
 
                     const dist = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
-                    const rad = (rad1 + rad2) * 0.9
+                    const rad = (rad1 + rad2) * 0.9 * s
 
                     if(dist < rad){
                         alpha = 0
@@ -214,6 +216,7 @@ export default class{
         const param1 = this.droplet.getUniform('tParam')
         const param1Arr = this.droplet.getUniform('tParam').image.data
         // const param2Arr = this.drops.drop.getAttribute('aParam').array
+        const scale = this.attributes.scale
         
         this.detectCollision.setOutput([count])
         this.detectCollision.setConstants({
@@ -223,7 +226,7 @@ export default class{
         })
 
         const temp = []
-        const res = this.detectCollision(param1Arr, position1Arr, position2Arr)
+        const res = this.detectCollision(param1Arr, position1Arr, position2Arr, scale)
 
         for(let i = 0; i < res.length; i++) temp.push(...res[i])
 
