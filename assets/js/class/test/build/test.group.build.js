@@ -232,7 +232,7 @@ export default class{
         const tw = new TWEEN.Tween(start)
         .to(end, 1000)
         .onUpdate(() => this.onUpdateTween(idx, opacity, start))
-        .onComplete(() => this.onCompleteTween(idx, elPos, opacity, objPos))
+        .onComplete(() => this.onCompleteTween({idx, elPos, opacity, objPos}))
         // .repeat(Infinity)
         // .delay(Math.random() * 1000)
         .start()
@@ -240,7 +240,7 @@ export default class{
     onUpdateTween(idx, opacity, {o}){
         opacity[idx] = o
     }
-    onCompleteTween(idx, opacity, objPos, elPos){
+    onCompleteTween({idx, opacity, objPos, elPos}){
         const w = this.size.obj.w
         const h = this.size.el.h
         const x = Math.random() * w - w / 2
