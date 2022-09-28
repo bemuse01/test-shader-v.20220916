@@ -40,6 +40,7 @@ export default class{
 
         if(uniforms){
             for(const name in uniforms){
+                if(!uniforms[name].value) continue
                 if(!uniforms[name].value.dispose) continue 
                 uniforms[name].value.dispose()
                 uniforms[name].value = null

@@ -2,6 +2,7 @@ import * as THREE from '../../../lib/three.module.js'
 import InstancedPlane from '../../objects/InstancedPlane.js'
 import Shader from '../shader/test.drop.shader.js'
 import ParentMethod from '../method/test.method.js'
+import PublicMethod from '../../../method/method.js'
 
 export default class{
     constructor({group, size, images, textures, attributes, dataTextures, renderOrder, param}){
@@ -68,13 +69,15 @@ export default class{
 
         this.group.add(this.drop.get())
     }
-    createAttributes(){
+    createTexture(img){
+        const canvas = PublicMethod.createTextureFromCanvas({img, width: this.size.el.w, height: this.size.el.h})
+        const bg = new THREE.CanvasTexture(canvas)
+        return bg
     }
 
 
-    // get
-    getObject(){
-        return this.drop
+    dispose(){
+        this.drop.dispose()
     }
 
 

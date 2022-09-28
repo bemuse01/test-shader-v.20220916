@@ -172,10 +172,13 @@ export default class{
         this.camera.aspect = width / height
         this.camera.updateProjectionMatrix()
 
+        const w = width * RATIO
+        const h = height * RATIO
+
         this.size = {
             el: {
-                w: width,
-                h: height
+                w,
+                h
             },
             obj: {
                 w: PublicMethod.getVisibleWidth(this.camera, 0),

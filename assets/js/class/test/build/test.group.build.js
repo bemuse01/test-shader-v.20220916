@@ -25,18 +25,8 @@ export default class{
                 min: 0.8,
                 max: 1.2
             },
-            wave: 0.003
+            wave: 0.002
         }
-
-        this.velocity = Array.from({length: this.param.count}, _ => 0)
-        this.timer = Array.from({length: this.param.count}, _ => Math.random() * 1.2)
-        this.delay = Array.from({length: this.param.count}, _ => 0)
-        this.play = Array.from({length: this.param.count}, _ => true)
-        this.position = Array.from({length: this.param.count * 2}, _ => -1000)
-
-        this.radius = this.param.radius * 2
-
-        this.noise = new SimplexNoise()
 
         this.init()
     }
@@ -44,8 +34,17 @@ export default class{
 
     // init
     init(){
+        this.initUtils()
         this.create()
         // this.initTween()
+    }
+    initUtils(){
+        this.velocity = Array.from({length: this.param.count}, _ => 0)
+        this.timer = Array.from({length: this.param.count}, _ => Math.random() * 1.2)
+        this.delay = Array.from({length: this.param.count}, _ => 0)
+        this.play = Array.from({length: this.param.count}, _ => true)
+        this.position = Array.from({length: this.param.count * 2}, _ => -1000)
+        this.radius = this.param.radius * 2
     }
 
 
@@ -66,7 +65,10 @@ export default class{
         this.dataTextures = {
             seed: seedTexture
         }
-        
+ 
+        this.createObjects()
+    }
+    createObjects(){
         this.drop = new Drop({...this, renderOrder: 3, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
         this.trail = new Trail({...this, renderOrder: 1, attributes: this.attributes, dataTextures: this.dataTextures, param: this.param})
         this.droplets = new Droplets({...this, attributes: this.attributes, renderOrder: 2})
@@ -147,6 +149,31 @@ export default class{
         }
 
         this.dataTextures.seed.needsUpdate = true
+    }
+
+
+    // resize
+    resize(size){
+        this.size = size
+
+        this.dispose()
+
+        const {seedTexture} = this.createDataTexture()
+        this.dataTextures.seed.dispose()
+        this.dataTextures.seed = seedTexture
+
+        // this.initUtils()
+        this.createObjects()
+    }
+
+
+    // dispose
+    dispose(){
+        this.group.clear()
+
+        this.drop.dispose()
+        this.droplets.dispose()
+        this.trail.dispose()
     }
 
 

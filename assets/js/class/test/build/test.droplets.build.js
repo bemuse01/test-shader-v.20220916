@@ -34,6 +34,8 @@ export default class{
 
         this.scale = {min: 0.5, max: 1.5}
 
+        this.play = false
+
         this.init()
     }
 
@@ -85,6 +87,8 @@ export default class{
         this.droplet.get().renderOrder = this.renderOrder
 
         this.group.add(this.droplet.get())
+
+        this.play = true
     }
     createAttribute(w, h){
         const coord = []
@@ -190,19 +194,17 @@ export default class{
     }
 
 
-     // resize
-     resize(size){
-        this.size = size
-
-        const bg = this.createTexture(this.images[0])
-
-        this.droplet.setUniform('bg', bg)
-        this.droplet.setUniform('resolution', new THREE.Vector2(this.size.obj.w, this.size.obj.h))
+    // dispose
+    dispose(){
+        this.play = false
+        this.droplet.dispose()
     }
 
 
     // animate
     animate(){
+        if(!this.play) return
+
         this.updateDroplet()
     }
     updateDroplet(){
