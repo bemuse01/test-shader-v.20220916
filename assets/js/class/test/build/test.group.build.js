@@ -12,6 +12,8 @@ export default class{
         this.textures = textures
         this.gpu = gpu
 
+        console.log(this.size)
+
         this.param = {
             width: 10,
             xRange: 0.3,

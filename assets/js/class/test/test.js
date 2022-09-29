@@ -66,18 +66,18 @@ export default class{
 
         const {width, height} = this.element.getBoundingClientRect()
 
-        const w = width * RATIO
-        const h = height * RATIO
+        // const w = width * RATIO
+        // const h = height * RATIO
 
         this.scene = new THREE.Scene()
 
-        this.camera = new THREE.PerspectiveCamera(this.param.fov, w / h, this.param.near, this.param.far)
+        this.camera = new THREE.PerspectiveCamera(this.param.fov, width / height, this.param.near, this.param.far)
         this.camera.position.z = this.param.pos
         
         this.size = {
             el: {
-                w,
-                h
+                w: width,
+                h: height
             },
             obj: {
                 w: PublicMethod.getVisibleWidth(this.camera, 0),
@@ -172,13 +172,13 @@ export default class{
         this.camera.aspect = width / height
         this.camera.updateProjectionMatrix()
 
-        const w = width * RATIO
-        const h = height * RATIO
+        // const w = width * RATIO
+        // const h = height * RATIO
 
         this.size = {
             el: {
-                w,
-                h
+                w: width,
+                h: height
             },
             obj: {
                 w: PublicMethod.getVisibleWidth(this.camera, 0),
