@@ -9,6 +9,7 @@ import Group from './build/test.group.build.js'
 
 export default class{
     constructor({app}){
+        this.ratio = app.ratio
         this.renderer = app.renderer
 
         this.param = {
@@ -76,8 +77,8 @@ export default class{
         
         this.size = {
             el: {
-                w: width,
-                h: height
+                w: width * this.ratio,
+                h: height * this.ratio
             },
             obj: {
                 w: PublicMethod.getVisibleWidth(this.camera, 0),
@@ -177,8 +178,8 @@ export default class{
 
         this.size = {
             el: {
-                w: width,
-                h: height
+                w: width * this.ratio,
+                h: height * this.ratio
             },
             obj: {
                 w: PublicMethod.getVisibleWidth(this.camera, 0),
