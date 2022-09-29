@@ -13,10 +13,10 @@ export default class{
         this.gpu = gpu
 
         this.param = {
-            width: 10 * RATIO,
+            width: 10,
             xRange: 0.3,
             count: 20,
-            radius: 16,
+            radius: 12 * RATIO,
             momentum: {
                 min: 0.3,
                 max: 0.4
