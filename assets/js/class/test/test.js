@@ -69,8 +69,6 @@ export default class{
         const w = width * RATIO
         const h = height * RATIO
 
-        console.log(RATIO, w, h)
-
         this.scene = new THREE.Scene()
 
         this.camera = new THREE.PerspectiveCamera(this.param.fov, w / h, this.param.near, this.param.far)

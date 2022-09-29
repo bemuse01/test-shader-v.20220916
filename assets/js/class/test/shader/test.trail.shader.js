@@ -107,7 +107,7 @@ export default {
 
             float currentY = vElPos.y / eResolution.y;
 
-            float opacity3 = distance(rCoord, vec2(1.0, 1.0));
+            float opacity3 = distance(rCoord, vec2(0.5, 1.0));
 
             if(rCoord.x > pos - gap && rCoord.x < pos + gap){
                 float uvX = executeNormalizing(rCoord.x, 0.0, 1.0, pos - gap, pos + gap);

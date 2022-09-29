@@ -252,9 +252,7 @@ export default class{
 
     // tween
     createTween(idx){
-        const objPos = this.attributes.objPos
-        const elPos = this.attributes.elPos
-        const opacity = this.attributes.opacity
+        const {objPos, elPos, opacity} = this.attributes
 
         const start = {o: 1}
         const end = {o: 0}
