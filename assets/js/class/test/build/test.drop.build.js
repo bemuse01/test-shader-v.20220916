@@ -54,10 +54,14 @@ export default class{
                     oResolution: {value: new THREE.Vector2(this.size.obj.w, this.size.obj.h)},
                     width: {value: width},
                     radius: {value: radius},
-                    tSeed: {value: this.dataTextures.seed}
+                    tSeed: {value: this.dataTextures.seed},
+                    minCurveRange: {value: this.param.curveRange.min},
+                    maxCurveRange: {value: this.param.curveRange.max}
                 }
             }
         })
+
+        console.log(this.param.curveRange)
 
         this.drop.setInstancedAttribute('objPos', this.attributes.objPos, 2)
         this.drop.setInstancedAttribute('elPos', this.attributes.elPos, 2)

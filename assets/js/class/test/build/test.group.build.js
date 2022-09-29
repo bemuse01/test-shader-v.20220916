@@ -26,7 +26,11 @@ export default class{
                 max: 1.2
             },
             wave: 0.003,
-            offset: 0
+            offset: 0,
+            curveRange: {
+                min: 0.5 - 0.0125,
+                max: 0.5 + 0.0125
+            }
         }
 
         this.init()

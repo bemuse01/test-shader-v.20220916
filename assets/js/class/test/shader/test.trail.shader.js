@@ -43,6 +43,8 @@ export default {
         uniform sampler2D tFg;
         uniform sampler2D tSeed;
         uniform float radius;
+        uniform float minCurveRange;
+        uniform float maxCurveRange;
 
         varying vec2 vUv;
         varying vec2 vObjPos;
@@ -92,7 +94,7 @@ export default {
             bg.a = 0.0;
 
             vec4 seed = texture(tSeed, vec2(vIdx, coord.y));
-            float centerRatio = executeNormalizing(seed.x, 0.4875, 0.5125, -1.0, 1.0);
+            float centerRatio = executeNormalizing(seed.x, minCurveRange, maxCurveRange, -1.0, 1.0);
 
             float gap = 0.2 * vScale;
 
@@ -100,18 +102,22 @@ export default {
             vec2 ePos = oRatio * eResolution;
             vec2 centerPos = vec2(eResolution.x * centerRatio + ePos.x, vElPos.y);
 
-            float dist2 = distance(coord.y, 1.0);
-            float yOpacity = executeNormalizing(dist2, 0.1, 1.0, 0.0, 1.0);
+            float yDist = distance(coord.y, 1.0);
+            float yOpacity = executeNormalizing(yDist, 0.1, 1.0, 0.0, 1.0);
 
-            if(fragCoord.x > centerPos.x - radius && fragCoord.x < centerPos.x + radius){
-                float coordX = executeNormalizing(fragCoord.x, 0.0, 1.0, centerPos.x - radius, centerPos.x + radius);
+
+            float xMinPos = centerPos.x - radius;
+            float xMaxPos = centerPos.x + radius;
+
+            if(fragCoord.x > xMinPos && fragCoord.x < xMaxPos){
+                float coordX = executeNormalizing(fragCoord.x, 0.0, 1.0, xMinPos, xMaxPos);
                 
                 vec4 fg = texture(tFg, vec2(coordX, coord.y));
 
                 bg.rgb = blendOverlay(bg.rgb, fg.rgb * 1.0, 1.125);
 
-                float dist = distance(centerPos.x, fragCoord.x);
-                float xOpacity = executeNormalizing(dist, 0.0, 1.0, 0.0, radius);
+                float xDist = distance(centerPos.x, fragCoord.x);
+                float xOpacity = executeNormalizing(xDist, 0.0, 1.0, 0.0, radius);
 
                 float edgeOpacity = smoothstep(fragCoord.y, fragCoord.y * 0.95, vElPos.y);
 

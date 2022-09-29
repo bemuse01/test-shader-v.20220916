@@ -58,7 +58,9 @@ export default class{
                     tBg: {value: bg},
                     tFg: {value: fg},
                     tSeed: {value: this.dataTextures.seed},
-                    radius: {value: this.param.radius}
+                    radius: {value: this.param.radius},
+                    minCurveRange: {value: this.param.curveRange.min},
+                    maxCurveRange: {value: this.param.curveRange.max}
                 }
             }
         })
