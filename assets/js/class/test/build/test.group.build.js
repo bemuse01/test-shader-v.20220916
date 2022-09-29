@@ -120,6 +120,8 @@ export default class{
         const seed = []
         const rand = Math.random()
         
+        console.log('data texture height: ', h)
+
         for(let i = 0; i < h; i++){
             for(let j = 0; j < count; j++){
 

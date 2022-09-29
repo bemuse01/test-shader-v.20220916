@@ -21,6 +21,9 @@ export default class{
 
         const w = ~~(100 / RATIO * 1.1)
         const h = ~~(100 / RATIO * 1.1)
+        console.log(w, h, w * h)
+        console.log(this.size)
+        console.log('pixel ratio: ', RATIO)
 
         this.param = {
             w,
