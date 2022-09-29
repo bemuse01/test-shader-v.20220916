@@ -12,13 +12,11 @@ export default class{
         this.textures = textures
         this.gpu = gpu
 
-        console.log(this.size)
-
         this.param = {
             width: 10,
             xRange: 0.3,
             count: 20,
-            radius: 12 * RATIO,
+            radius: 16,
             momentum: {
                 min: 0.3,
                 max: 0.4
