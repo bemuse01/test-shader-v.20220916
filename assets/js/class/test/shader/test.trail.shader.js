@@ -92,18 +92,16 @@ export default {
             bg.a = 0.0;
 
             vec4 seed = texture(tSeed, vec2(vIdx, coord.y));
-
-            float nPos = seed.x;
-            float pos = executeNormalizing(nPos, 0.4875, 0.5125, -1.0, 1.0);
+            float centerRatio = executeNormalizing(seed.x, 0.4875, 0.5125, -1.0, 1.0);
 
             float gap = 0.2 * vScale;
 
             vec2 oRatio = vObjPos / oResolution;
             vec2 ePos = oRatio * eResolution;
-            vec2 centerPos = vec2(eResolution.x * pos + ePos.x, vElPos.y);
+            vec2 centerPos = vec2(eResolution.x * centerRatio + ePos.x, vElPos.y);
 
             float dist2 = distance(coord.y, 1.0);
-            float opacity3 = executeNormalizing(dist2, 0.1, 1.0, 0.0, 1.0);
+            float yOpacity = executeNormalizing(dist2, 0.1, 1.0, 0.0, 1.0);
 
             if(fragCoord.x > centerPos.x - radius && fragCoord.x < centerPos.x + radius){
                 float coordX = executeNormalizing(fragCoord.x, 0.0, 1.0, centerPos.x - radius, centerPos.x + radius);
@@ -113,15 +111,14 @@ export default {
                 bg.rgb = blendOverlay(bg.rgb, fg.rgb * 1.0, 1.125);
 
                 float dist = distance(centerPos.x, fragCoord.x);
-                float opacity = executeNormalizing(dist, 0.0, 1.0, 0.0, radius);
+                float xOpacity = executeNormalizing(dist, 0.0, 1.0, 0.0, radius);
 
-                float opacity2 = smoothstep(fragCoord.y, fragCoord.y * 0.95, vElPos.y) * 0.9;
+                float edgeOpacity = smoothstep(fragCoord.y, fragCoord.y * 0.95, vElPos.y) * 0.9;
 
-                // bg.rgb += vec3(0.3);
-                bg.a = (1.1 - opacity) * opacity2 * vOpacity;
+                bg.a = (1.1 - xOpacity) * edgeOpacity * vOpacity;
             }
 
-            bg.a *= opacity3;
+            bg.a *= yOpacity;
 
             gl_FragColor = bg;
         }
