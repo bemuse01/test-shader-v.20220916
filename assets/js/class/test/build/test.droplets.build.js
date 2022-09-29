@@ -19,8 +19,8 @@ export default class{
 
         // this.dropsParam = this.drops.param
 
-        const w = ~~(this.size.el.w / 11) > 100 ? 100 : ~~(this.size.el.w / 11)
-        const h = ~~(this.size.el.h / 11) > 100 ? 100 : ~~(this.size.el.h / 11)
+        const w = 100 / RATIO
+        const h = 100 / RATIO
 
         this.param = {
             w,
