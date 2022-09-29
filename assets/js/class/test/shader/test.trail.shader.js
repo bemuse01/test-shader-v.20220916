@@ -113,7 +113,7 @@ export default {
                 float dist = distance(centerPos.x, fragCoord.x);
                 float xOpacity = executeNormalizing(dist, 0.0, 1.0, 0.0, radius);
 
-                float edgeOpacity = smoothstep(fragCoord.y, fragCoord.y * 0.95, vElPos.y) * 0.9;
+                float edgeOpacity = smoothstep(fragCoord.y, fragCoord.y * 0.95, vElPos.y);
 
                 bg.a = (1.1 - xOpacity) * edgeOpacity * vOpacity;
             }
