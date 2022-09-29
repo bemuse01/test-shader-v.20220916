@@ -19,8 +19,8 @@ export default class{
 
         // this.dropsParam = this.drops.param
 
-        const w = ~~(100 / RATIO * 1.1)
-        const h = ~~(100 / RATIO * 1.1)
+        const w = ~~(100 / RATIO)
+        const h = ~~(100 / RATIO)
 
         this.param = {
             w,

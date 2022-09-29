@@ -7,8 +7,6 @@ export default class{
         const {width, height} = this.wrap.getBoundingClientRect()
         this.width = width
         this.height = height
-
-        this.ratio = THREE.MathUtils.clamp(window.devicePixelRatio, 1.0, 1.5)
         
         this.init()
     }
@@ -28,7 +26,7 @@ export default class{
     
         this.renderer = new THREE.WebGLRenderer({antialias: true, alpha: true, canvas: canvas})
         this.renderer.setSize(this.width, this.height)
-        this.renderer.setPixelRatio(this.ratio)
+        this.renderer.setPixelRatio(RATIO)
         // this.renderer.setPixelRatio(1)
         this.renderer.setClearColor(0x000000, 0.0)
         this.renderer.setClearAlpha(0.0)

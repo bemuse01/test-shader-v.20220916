@@ -19,6 +19,8 @@ export default class{
             pos: 100
         }
 
+        console.log(RATIO)
+
         this.modules = {
             // Bg,
             // Lines
@@ -77,8 +79,8 @@ export default class{
         
         this.size = {
             el: {
-                w: width * this.ratio,
-                h: height * this.ratio
+                w: width * RATIO,
+                h: height * RATIO
             },
             obj: {
                 w: PublicMethod.getVisibleWidth(this.camera, 0),
@@ -178,8 +180,8 @@ export default class{
 
         this.size = {
             el: {
-                w: width * this.ratio,
-                h: height * this.ratio
+                w: width * RATIO,
+                h: height * RATIO
             },
             obj: {
                 w: PublicMethod.getVisibleWidth(this.camera, 0),
