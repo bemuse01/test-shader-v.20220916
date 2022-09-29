@@ -57,7 +57,8 @@ export default class{
                     width: {value: this.param.width},
                     tBg: {value: bg},
                     tFg: {value: fg},
-                    tSeed: {value: this.dataTextures.seed}
+                    tSeed: {value: this.dataTextures.seed},
+                    radius: {value: this.param.radius}
                 }
             }
         })
