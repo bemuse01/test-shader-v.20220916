@@ -16,7 +16,7 @@ export default class{
             width: 10,
             xRange: 0.3,
             count: 20,
-            radius: 16,
+            radius: 16 * RATIO,
             momentum: {
                 min: 0.3,
                 max: 0.4
