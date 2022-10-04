@@ -188,6 +188,7 @@ export default class{
     animate(){
         this.moveDrop()
         this.getDropPosition()
+        // this.detectCollision()
         this.trail.animate()
         this.drop.animate()
         this.droplets.animate()
@@ -254,27 +255,47 @@ export default class{
             this.position[idx + 1] = y2
         }
     }
-    // detectCollision(){
-    //     const position = this.position
-    //     const len = position.length / 2
+    detectCollision(){
+        const scale = this.attributes.scale
+        const position = this.position
+        const len = position.length / 2
+        const {radius} = this.param
+        
+        const ew = this.size.el.w
+        const ow = this.size.obj.w
+        const eh = this.size.el.h
+        const oh = this.size.obj.h
 
-    //     for(let i = 0; i < len; i++){
-    //         const idx = i * 2
+        for(let i = 0; i < len; i++){
+            const idx = i * 2
 
-    //         const x1 = position[idx + 0]
-    //         const y1 = position[idx + 1]
+            const scale1 = scale[i]
+            const rad1 = radius * scale1
 
-    //         for(let j = 0; j < len; j++){
-    //             const idx2 = j * 2
+            const x1 = position[idx + 0] / ow * ew
+            const y1 = position[idx + 1] / oh * eh
 
-    //             if(i === j) continue
+            for(let j = 0; j < len; j++){
+                const idx2 = j * 2
 
-    //             const x2 = position[idx2 + 0]
-    //             const y2 = position[idx2 + 0]
-    //         }
+                if(i === j) continue
 
-    //     }
-    // }
+                const scale2 = scale[j]
+                const rad2 = radius * scale2
+
+                const x2 = position[idx2 + 0] / ow * ew
+                const y2 = position[idx2 + 1] / oh * eh
+
+                const dist = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+
+                if(rad1 + rad2 < dist){
+                    // this.delay[i] = this.timer[i]
+                    // this.delay[j] = this.timer[j]
+                }
+            }
+
+        }
+    }
 
 
     // tween
