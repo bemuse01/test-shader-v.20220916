@@ -45,7 +45,7 @@ export default class{
     }
     initUtils(){
         this.velocity = Array.from({length: this.param.count}, _ => 0)
-        this.timer = Array.from({length: this.param.count}, _ => Math.random() * 1.2)
+        this.timer = Array.from({length: this.param.count}, _ => Math.random() * 1.0)
         this.delay = Array.from({length: this.param.count}, _ => 0)
         this.play = Array.from({length: this.param.count}, _ => true)
         this.position = Array.from({length: this.param.count * 2}, _ => -1000)
@@ -254,6 +254,27 @@ export default class{
             this.position[idx + 1] = y2
         }
     }
+    // detectCollision(){
+    //     const position = this.position
+    //     const len = position.length / 2
+
+    //     for(let i = 0; i < len; i++){
+    //         const idx = i * 2
+
+    //         const x1 = position[idx + 0]
+    //         const y1 = position[idx + 1]
+
+    //         for(let j = 0; j < len; j++){
+    //             const idx2 = j * 2
+
+    //             if(i === j) continue
+
+    //             const x2 = position[idx2 + 0]
+    //             const y2 = position[idx2 + 0]
+    //         }
+
+    //     }
+    // }
 
 
     // tween
